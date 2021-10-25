@@ -20,4 +20,4 @@ jobs:
         pip install pylint
     - name: Analysing the code with pylint
       run: |
-        pylint $(find . -name "*.py" | xargs) --max-line-length=240 --disable="broad-except,missing-module-docstring,missing-function-docstring"
+        pylint $(find . -name "*.py" | xargs) --max-line-length=240 --disable="broad-except,missing-module-docstring,missing-function-docstring,disallowed-name,unspecified-encoding"
