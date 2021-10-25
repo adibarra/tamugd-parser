@@ -9,10 +9,11 @@ This project is dedicated to helping analyze the massive amounts of data release
     - Automatically adds parsed course data to a mySQL database.
 
 
-## Version 1.0 Roadmap:
+## Version 2.0 Roadmap:
 - [x] Grade report parsing
 - [x] Automatically add data to a mySQL database backend
-- [ ] Automated grade report updates
+- [x] Full rewrite with multithreading
+- [ ] Fully automated grade report updates (auto add new reports)
 
 
 ## How to use:
