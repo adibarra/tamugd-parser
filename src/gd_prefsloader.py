@@ -1,4 +1,4 @@
-# TAMU-GradeDistribution-ParserV2: GD_prefsloader.py
+# TAMU-GradeDistribution-ParserV2: gd_prefsloader.py
 # @authors: github/adibarra
 
 
@@ -21,7 +21,7 @@ class PreferenceLoader:
     preference_file = 'prefs.json'
 
     @staticmethod
-    def generatePrefsFile():
+    def generate_prefs_file():
         generated = False
         filecontents = {
             'database_host': 'localhost',
@@ -38,34 +38,34 @@ class PreferenceLoader:
                 original_umask = os.umask(0)
                 os.makedirs(os.path.dirname(os.path.realpath(__file__))+'/'+PreferenceLoader.preferences_location)
                 os.umask(original_umask)
-        except Exception as e:
+        except Exception as ex:
             print('There was an error while trying to create the '+PreferenceLoader.preferences_location+' directory:')
-            print(e)
+            print(ex)
 
         # check if preferences file exists else create
-        fileName = os.path.dirname(os.path.realpath(__file__))+'/'+PreferenceLoader.preferences_location+PreferenceLoader.preference_file
-        if not os.path.isfile(fileName):
+        file_name = os.path.dirname(os.path.realpath(__file__))+'/'+PreferenceLoader.preferences_location+PreferenceLoader.preference_file
+        if not os.path.isfile(file_name):
             try:
                 # create preferences file with default settings
-                with open(fileName, 'w') as (json_file):
+                with open(file_name, 'w', encoding='utf8') as (json_file):
                     json.dump(filecontents, json_file, indent=4)
                     generated = True
-            except Exception as e:
+            except Exception as ex:
                 print('There was an error while trying to create the '+PreferenceLoader.preference_file+' file:')
-                print(e)
+                print(ex)
 
         return generated
 
     @staticmethod
-    def loadPrefs():
-        if PreferenceLoader.generatePrefsFile():
+    def load_prefs():
+        if PreferenceLoader.generate_prefs_file():
             print('Generated preferences file ('+PreferenceLoader.preferences_location+PreferenceLoader.preference_file+')')
             print('Fill it out then restart the script when you are ready.')
             return False
 
         try:
-            filePath = os.path.dirname(os.path.realpath(__file__))+'/'+PreferenceLoader.preferences_location+PreferenceLoader.preference_file
-            with open(filePath) as json_file:
+            file_path = os.path.dirname(os.path.realpath(__file__))+'/'+PreferenceLoader.preferences_location+PreferenceLoader.preference_file
+            with open(file_path, 'r', encoding='utf8') as json_file:
                 prefs = json.load(json_file)
 
                 PreferenceLoader.db_address = prefs['database_host']
@@ -76,7 +76,7 @@ class PreferenceLoader:
                 PreferenceLoader.logger_enabled = prefs['logger_enabled']
                 return True
 
-        except Exception as e:
+        except Exception as ex:
             print('RUNTIME ERROR: Failed to open Prefs file.')
-            print(e)
+            print(ex)
             return False
