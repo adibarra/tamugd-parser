@@ -34,16 +34,14 @@ class Utils:
             Logger.log('-----------------------\n', importance=None)
             sys.exit(0)
 
-
     # all shutdown tasks go here to declutter the main file
     @staticmethod
     def shutdown() -> None:
         Logger.log('\n-----------------------\nGoodbye...\n-----------------------\n\n\n', importance=None)
 
-
     # convert parsed list into database format
     @staticmethod
-    def convert_to_entries(to_convert:list, year:int, semster:str) -> List:
+    def convert_to_entries(to_convert: list, year: int, semster: str) -> List:
         converted_list = []
         try:
             for entry in to_convert:
@@ -55,10 +53,9 @@ class Utils:
                 entry[7], entry[9], float(entry[12]), entry[13], entry[14], entry[15], entry[16], entry[17], entry[18], entry[19]])+'\n')
         return converted_list
 
-
     # convert parsed list into database format
     @staticmethod
-    def is_honors(section:str) -> bool:
+    def is_honors(section: str) -> bool:
         reg1 = re.compile('2[0-9]{2,}')
         reg2 = re.compile('58[0-9]{1,}')
         return len(reg1.findall(section)) > 0 or len(reg2.findall(section)) > 0

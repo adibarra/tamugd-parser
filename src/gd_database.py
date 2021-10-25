@@ -21,7 +21,6 @@ class DatabaseHandler:
 
         return DatabaseHandler.check_db_connection_error() == 'No Error'
 
-
     @staticmethod
     def check_db_connection_error():
         """Checks database connection error.
@@ -31,7 +30,7 @@ class DatabaseHandler:
 
         try:
             database = pymysql.connect(host=PreferenceLoader.db_address, user=PreferenceLoader.db_user,
-                                 password=PreferenceLoader.db_pass, database=PreferenceLoader.db_name, autocommit=True)
+                                       password=PreferenceLoader.db_pass, database=PreferenceLoader.db_name, autocommit=True)
             cursor = database.cursor()
             cursor.execute('show tables;')
             cursor.fetchall()
@@ -40,9 +39,8 @@ class DatabaseHandler:
             return str(ex.args[0])+': '+str(ex.args[1])
         return 'No Error'
 
-
     @staticmethod
-    def send_query(message:str):
+    def send_query(message: str):
         """Send a querty to the database server.
         Parameters:
             message (str): The command to send to the MySQL database
@@ -53,9 +51,9 @@ class DatabaseHandler:
 
         try:
             database = pymysql.connect(host=PreferenceLoader.db_address, user=PreferenceLoader.db_user,
-                                 password=PreferenceLoader.db_pass, database=PreferenceLoader.db_name, autocommit=True)
+                                       password=PreferenceLoader.db_pass, database=PreferenceLoader.db_name, autocommit=True)
             cursor = database.cursor()
-            #Logger.log('>>> Executing DB Query: '+message, Importance.DBUG)
+            # Logger.log('>>> Executing DB Query: '+message, Importance.DBUG)
             cursor.execute(message)
             results = cursor.fetchall()
             database.close()
@@ -66,7 +64,7 @@ class DatabaseHandler:
 
 
     @staticmethod
-    def add_grade_entries(table_name:str, entry_list:list):
+    def add_grade_entries(table_name: str, entry_list: list):
         """Adds a list or single grade report entery to the database
         Parameters:
             table_name (str): Name of the table to check for
@@ -76,7 +74,7 @@ class DatabaseHandler:
             str: Will return a string if an error was encountered
         """
 
-        def split_to_string(entry:list):
+        def split_to_string(entry: list):
             # [year,semester,college,departmentName,course,section,honors,avgGPA,professorName,A,B,C,D,F,I,S,U,Q,X]
             return ('('+str(entry[ 0])+',"'+str(entry[ 1])+'","'+str(entry[ 2])+'","'+str(entry[ 3])+'","'+str(entry[ 4])+'","'+str(entry[ 5])+'",'+str(entry[ 6])+','
                        +str(entry[ 7])+',"'+str(entry[ 8])+'",' +str(entry[ 9])+ ',' +str(entry[10])+ ',' +str(entry[11])+ ',' +str(entry[12])+ ','+str(entry[13])+','
@@ -84,13 +82,13 @@ class DatabaseHandler:
 
         try:
             Logger.log('Started adding new records to database', Importance.INFO)
-            if isinstance(entry_list, list) and len(entry_list) > 0 and not isinstance(entry_list[0],list):
-                #Logger.log('Adding new entry to '+table_name, Importance.DBUG)
+            if isinstance(entry_list,list) and len(entry_list) > 0 and not isinstance(entry_list[0],list):
+                # Logger.log('Adding new entry to '+table_name, Importance.DBUG)
                 results = DatabaseHandler.send_query('INSERT INTO '+table_name+' '
                     +'(year,semester,college,departmentName,course,section,honors,avgGPA,professorName,numA,numB,numC,numD,numF,numI,numS,numU,numQ,numX) VALUES '
                     +split_to_string(entry_list)+';')
 
-            elif isinstance(entry_list, list) and len(entry_list) > 0 and isinstance(entry_list[0],list):
+            elif isinstance(entry_list,list) and len(entry_list) > 0 and isinstance(entry_list[0],list):
                 to_add = ''
                 results = []
                 rows_added = 0
@@ -100,7 +98,7 @@ class DatabaseHandler:
                     to_add += split_to_string(entry)+'@'
 
                 to_add = to_add[:-1]
-                #Logger.log('Adding new entries to '+tableName, Importance.DBUG)
+                # Logger.log('Adding new entries to '+tableName, Importance.DBUG)
 
                 # add batchSize at a time until out of records then the remainder
                 to_add_split = to_add.split('@')
@@ -131,8 +129,8 @@ class DatabaseHandler:
 
             elif len(entry_list) == 0:
                 return ()
-
         except pymysql.Error as ex:
+            print('>>> Error Executing DB Query: ERROR '+str(ex))
             Logger.log('>>> Error Executing DB Query: ERROR '+str(ex), Importance.WARN)
             return 'ERROR '+str(ex)
         Logger.log('Finished adding new records('+str(rows_added)+') to database', Importance.INFO)
