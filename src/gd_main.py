@@ -1,4 +1,4 @@
-# TAMU-GradeDistribution-ParserV2: GD_main.py
+# TAMU-GradeDistribution-ParserV2: gd_main.py
 # @authors: github/adibarra
 
 
