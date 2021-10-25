@@ -1,0 +1,4 @@
+PyPDF2==1.0.2
+pymysql==1.26.0
+alive_progress==2.0.0
+beautifulsoup4==4.10.0
