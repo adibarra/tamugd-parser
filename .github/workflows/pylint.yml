@@ -18,6 +18,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install pylint
+        pip install pylint-exit
     - name: Analysing the code with pylint
       run: |
-        pylint $(find . -name "*.py" | xargs) --max-line-length=240 --disable="broad-except,missing-module-docstring,missing-function-docstring,disallowed-name,unspecified-encoding"
+        pylint $(find . -name "*.py" | xargs) --max-line-length=240 --disable="broad-except,missing-module-docstring,missing-function-docstring,disallowed-name,unspecified-encoding" || pylint-exit $?
