@@ -37,13 +37,14 @@ def scrape_report_metadata() -> Tuple[List[str],List[str]]:
 
 
 # load pdf or download from given url if not present
-def load_pdf(download_url:str, no_dl=False) -> str:
+def load_pdf(download_url: str, no_dl=False) -> str:
     file_name = download_url.split('/')[-1]
     file_path = PDF_SAVE_DIR+file_name
+
     def download_pdf():
         Logger.log('Downloading PDF('+file_name+').', Importance.INFO)
         response = requests.get(download_url)
-        with open(file_path, 'wb+', encoding='utf8') as file:
+        with open(file_path,'wb+') as file:
             file.write(response.content)
         Logger.log('Finished downloading and saving PDF('+file_name+').', Importance.INFO)
 
@@ -65,7 +66,7 @@ def load_pdf(download_url:str, no_dl=False) -> str:
 
 
 # process given PDFdata
-def process_pdf(pdf_data) -> None:
+def process_pdf(pdf_data: Tuple) -> None:
     try:
         year, semester, college, bar = pdf_data
         pdflink = PDF_BASE_LINK.format(year+semester, college)

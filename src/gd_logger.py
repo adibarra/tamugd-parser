@@ -23,7 +23,7 @@ class Importance(enum.IntEnum):
 
 class Logger:
     """ Class to handle logging """
-    MAX_LOGFILE_SIZE = 1e+6 # 1 MB
+    MAX_LOGFILE_SIZE = 1e+6  # 1 MB
 
     # log message to logfile
     @staticmethod
@@ -44,7 +44,7 @@ class Logger:
         file_path = os.path.dirname(os.path.realpath(__file__))+'/../logs/'+time.strftime('log-%Y-%m-%d')+'.log'
         if not os.path.isfile(file_path):
             try:
-                with open(file_path, 'a', encoding='utf8') as log_file:
+                with open(file_path,'a') as log_file:
                     pass
             except Exception as ex:
                 print('There was an error while trying to create the logfile:')
@@ -52,7 +52,7 @@ class Logger:
 
         # write message to the logfile
         try:
-            with open(file_path, 'a', encoding='utf8') as (log_file):
+            with open(file_path,'a') as log_file:
                 if importance is None:
                     log_file.write(message+'\n')
                 else:
@@ -75,6 +75,6 @@ class Logger:
                     zip_file.write(file_path[:len(file_path)-4]+'.'+str(log_number+1)+'.log', file_name)
                 os.remove(file_path[:len(file_path)-4]+'.'+str(log_number+1)+'.log')
 
-        except Exception as ex:
+        except Exception:
             print('There was an error when reading or writing a file:')
             print(traceback.format_exc())

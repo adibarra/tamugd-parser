@@ -47,7 +47,7 @@ class PreferenceLoader:
         if not os.path.isfile(file_name):
             try:
                 # create preferences file with default settings
-                with open(file_name, 'w', encoding='utf8') as (json_file):
+                with open(file_name,'w') as json_file:
                     json.dump(filecontents, json_file, indent=4)
                     generated = True
             except Exception as ex:
@@ -65,7 +65,7 @@ class PreferenceLoader:
 
         try:
             file_path = os.path.dirname(os.path.realpath(__file__))+'/'+PreferenceLoader.preferences_location+PreferenceLoader.preference_file
-            with open(file_path, 'r', encoding='utf8') as json_file:
+            with open(file_path,'r') as json_file:
                 prefs = json.load(json_file)
 
                 PreferenceLoader.db_address = prefs['database_host']
