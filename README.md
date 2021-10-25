@@ -4,14 +4,6 @@ This project is dedicated to helping analyze the massive amounts of data release
 
 ---
 
-## Dependencies:
-```
-$ python3 -m pip install PyPDF2
-$ python3 -m pip install pymysql
-$ python3 -m pip install beautifulsoup4
-```
-
-
 ## Features:
 - Parse grade report PDFs published by Texas A&M University's Registrar:
     - Automatically adds parsed course data to SQL database.
