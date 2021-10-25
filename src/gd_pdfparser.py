@@ -18,8 +18,8 @@ class PDFParser:
     def parse_grades_pdf(pdf_file_path:str) -> List:
         Logger.log('Started parsing full PDF('+pdf_file_path.split('/')[-1]+')', Importance.INFO)
         try:
-            pdf_file = open(pdf_file_path,'rb')
-            pdf_reader = PyPDF2.PdfFileReader(pdf_file)
+            with open(pdf_file_path,'rb',encoding='utf8') as pdf_file:
+                pdf_reader = PyPDF2.PdfFileReader(pdf_file)
         except PyPDF2.utils.PdfReadError:
             print('Bad or missing PDF: '+pdf_file_path)
             return []

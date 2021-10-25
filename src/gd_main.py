@@ -43,7 +43,7 @@ def load_pdf(download_url:str, no_dl=False) -> str:
     def download_pdf():
         Logger.log('Downloading PDF('+file_name+').', Importance.INFO)
         response = requests.get(download_url)
-        with open(file_path, 'wb+') as file:
+        with open(file_path, 'wb+', encoding='utf8') as file:
             file.write(response.content)
         Logger.log('Finished downloading and saving PDF('+file_name+').', Importance.INFO)
 
