@@ -51,13 +51,13 @@ This project is dedicated to helping analyze the massive amounts of data release
 3. Generate prefs.json and update file:
     ```
     # run in TAMU-GradeDistribution-ParserV2
-    $ python3 src/GD_main.py
+    $ python3 src/gd_main.py
     $ nano prefs.json
     ```
 4. Run main python script:
     ```
     # NOTE: building the database will take a while
-    $ python3 src/GD_main.py
+    $ python3 src/gd_main.py
     ```
 5. Monitor created logfile (optional):
     ```
