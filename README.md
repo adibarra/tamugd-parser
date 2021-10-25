@@ -23,7 +23,7 @@ This project is dedicated to helping analyze the massive amounts of data release
     ```
 2. Generate prefs.json file:
     ```
-    $ cd TAMU-GradeDistribution-ParserV2
+    # run in TAMU-GradeDistribution-ParserV2
     $ python3 src/GD_main.py
     ```
 3. Update contents of prefs.json file:
@@ -33,11 +33,11 @@ This project is dedicated to helping analyze the massive amounts of data release
 4. Run main python script:
     ```
     # NOTE: building the database will take a while
-    $ cd TAMU-GradeDistribution-ParserV2
     $ python3 src/GD_main.py
     ```
 5. Monitor created logfile (optional):
     ```
     # automatically get and display newest logfile
+    $ cd logs
     $ tail -f $(ls -t | head -1)
     ```
