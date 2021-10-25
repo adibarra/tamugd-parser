@@ -1,6 +1,6 @@
 # TAMU-GradeDistribution-ParserV2
 
-This project is dedicated to helping analyze the massive amounts of data released every semester by Texas A&M University's Registrar's office regarding the courses they offer.
+This project is dedicated to helping analyze the massive amounts of data released every semester by Texas A&M University's Registrar's office.
 
 ---
 
