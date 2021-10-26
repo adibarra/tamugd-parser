@@ -44,8 +44,8 @@ class PDFParser:
                             # [year,semester,college,departmentName,course,section,honors,avgGPA,professorName,A,B,C,D,F,I,S,U,Q,X]
                             output_list.append([int(year), semester_names[int(semester)-1], college,
                                                 page_str[k].split('-')[0], page_str[k].split('-')[1], page_str[k].split('-')[2], int(Utils.is_honors(page_str[k].split('-')[2])),
-                                                float(page_str[k+ 1]),     page_str[k+ 2],  int(page_str[k+ 4]), int(page_str[k+ 5]), int(page_str[k+ 6]), int(page_str[k+ 7]),
-                                                int(page_str[k+ 8]), int(page_str[k+10]), int(page_str[k+11]), int(page_str[k+12]), int(page_str[k+13]), int(page_str[k+14])])
+                                                float(page_str[k+1]), page_str[k+2], int(page_str[k+4]), int(page_str[k+5]), int(page_str[k+6]), int(page_str[k+7]),
+                                                int(page_str[k+8]), int(page_str[k+10]), int(page_str[k+11]), int(page_str[k+12]), int(page_str[k+13]), int(page_str[k+14])])
                     else:
                         # print('(NEW 2017+) PDF FORMAT')
                         page_str = [ps.strip() for ps in page_str[38:]]
@@ -59,8 +59,8 @@ class PDFParser:
                             # [year,semester,college,departmentName,course,section,honors,avgGPA,professorName,A,B,C,D,F,I,S,U,Q,X]
                             output_list.append([int(year), semester_names[int(semester)-1], college,
                                                 page_str[k].split('-')[0], page_str[k].split('-')[1], page_str[k].split('-')[2], int(Utils.is_honors(page_str[k].split('-')[2])),
-                                                float(page_str[k+12]),     page_str[k+19],  int(page_str[k+ 3]), int(page_str[k+ 5]), int(page_str[k+ 7]), int(page_str[k+ 9]),
-                                                int(page_str[k+13]), int(page_str[k+14]), int(page_str[k+15]), int(page_str[k+16]), int(page_str[k+17]), int(page_str[k+18])])
+                                                float(page_str[k+12]), page_str[k+19],  int(page_str[k+1]), int(page_str[k+3]), int(page_str[k+5]), int(page_str[k+7]),
+                                                int(page_str[k+9]), int(page_str[k+13]), int(page_str[k+14]), int(page_str[k+15]), int(page_str[k+16]), int(page_str[k+17])])
                 return output_list
         except PyPDF2.utils.PdfReadError:
             print('Bad or missing PDF: '+pdf_file_path)
