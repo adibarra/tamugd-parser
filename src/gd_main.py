@@ -68,7 +68,7 @@ def load_pdf(download_url: str, no_dl=False) -> str:
 # process given PDFdata
 def process_pdf(pdf_data: Tuple) -> None:
     try:
-        year, semester, college, bar = pdf_data
+        year, semester, college, progress_bar = pdf_data
         pdflink = PDF_BASE_LINK.format(year+semester, college)
         pdf_file_path = load_pdf(pdflink, no_dl=(year in LEGACY_YEAR_DATA))
         grades_list = PDFParser.parse_grades_pdf(pdf_file_path)
@@ -76,7 +76,7 @@ def process_pdf(pdf_data: Tuple) -> None:
     except Exception:
         Logger.log('Unable to parse PDF('+pdf_file_path.split('/')[-1]+')', Importance.WARN)
     finally:
-        bar(1)
+        progress_bar(1)
 
 
 # main
@@ -98,13 +98,13 @@ def main() -> None:
         # UT=University Totals
         # PROF=Professional, format not yet supported
 
-    with alive_bar(total=len(years)*len(semesters)*len(colleges),title='Building database') as bar:
+    with alive_bar(total=len(years)*len(semesters)*len(colleges),title='Building database') as progress_bar:
         # generate pdf urls
         pdf_data = []
         for year in years[::-1]:
             for semester in semesters:
                 for college in colleges:
-                    pdf_data.append([year,semester,college,bar])
+                    pdf_data.append([year,semester,college,progress_bar])
 
         # automatically load pdfs from pdfs list
         try:
