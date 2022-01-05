@@ -19,8 +19,8 @@ from gd_pdfparser import PDFParser
 
 OVERWRITE_ALL_PDF = False
 LEGACY_YEAR_DATA = ['2015','2014']
-PDF_ROOT_LINK = 'https://web-as.tamu.edu/gradereport/'
-PDF_BASE_LINK = 'https://web-as.tamu.edu/gradereport/PDFReports/{0}/grd{0}{1}.pdf'
+PDF_ROOT_LINK = 'https://web-as.tamu.edu/gradereports/'
+PDF_BASE_LINK = 'https://web-as.tamu.edu/gradereports/PDFReports/{0}/grd{0}{1}.pdf'
 PDF_SAVE_DIR  = 'pdfs/'
 
 

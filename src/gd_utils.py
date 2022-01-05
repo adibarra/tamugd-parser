@@ -27,7 +27,7 @@ class Utils:
                 Logger.log('Database connection established!', importance=None)
             else:
                 Logger.log('>>> Unable to establish database connection <<<', Importance.CRIT)
-                Logger.log('                           '+DatabaseHandler.check_db_connection_error(), importance=None)
+                Logger.log(' '*27+DatabaseHandler.check_db_connection_error(), importance=None)
             Logger.log('-----------------------\n', importance=None)
         else:
             Logger.log('Failed to load Preferences file. (See console for details).', importance=None)
@@ -53,9 +53,10 @@ class Utils:
                 entry[7], entry[9], float(entry[12]), entry[13], entry[14], entry[15], entry[16], entry[17], entry[18], entry[19]])+'\n')
         return converted_list
 
-    # convert parsed list into database format
+    # check if the section number is a honors section
     @staticmethod
     def is_honors(section: str) -> bool:
         reg1 = re.compile('2[0-9]{2,}')
         reg2 = re.compile('58[0-9]{1,}')
-        return len(reg1.findall(section)) > 0 or len(reg2.findall(section)) > 0
+        return (len(reg1.findall(section)) > 0 or
+                len(reg2.findall(section)) > 0)
