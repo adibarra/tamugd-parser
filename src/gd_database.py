@@ -35,7 +35,7 @@ class DatabaseHandler:
             cursor.execute('show tables;')
             cursor.fetchall()
             database.close()
-        except pymysql.Error as ex:
+        except Exception as ex:
             return str(ex.args[0])+': '+str(ex.args[1])
         return 'No Error'
 
@@ -57,7 +57,7 @@ class DatabaseHandler:
             cursor.execute(message)
             results = cursor.fetchall()
             database.close()
-        except pymysql.Error as ex:
+        except Exception as ex:
             Logger.log('>>> Error Executing DB Query: ERROR '+str(ex), Importance.CRIT)
             return 'ERROR '+str(ex)
         return results
@@ -129,7 +129,7 @@ class DatabaseHandler:
 
             elif len(entry_list) == 0:
                 return ()
-        except pymysql.Error as ex:
+        except Exception as ex:
             print('>>> Error Executing DB Query: ERROR '+str(ex))
             Logger.log('>>> Error Executing DB Query: ERROR '+str(ex), Importance.WARN)
             return 'ERROR '+str(ex)
