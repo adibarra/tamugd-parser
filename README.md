@@ -21,8 +21,9 @@ This project is dedicated to helping analyze the massive amounts of data release
     ```
     # create mySQL database table
     $ sudo mysql
-    mysql> use database_name_here;
-    mysql> CREATE TABLE tamugrades (
+    mysql> CREATE DATABASE database_name_here;
+    mysql> USE database_name_here;
+    mysql> CREATE TABLE database_table_name_here (
                year SMALLINT(4),
                semester VARCHAR(6),
                college VARCHAR(7),
@@ -43,24 +44,37 @@ This project is dedicated to helping analyze the massive amounts of data release
                numQ SMALLINT(3),
                numX SMALLINT(3)
            );
+    mysql> exit;
     ```
-2. Install dependencies:
+2. Create database user:
+    ```
+    # create database user
+    $ sudo mysql
+    mysql> CREATE USER 'database_user_name_here'@'localhost' IDENTIFIED BY 'database_user_password_here';
+    mysql> GRANT ALL PRIVILEGES ON database_name_here.* TO 'database_user_name_here'@'localhost';
+    mysql> FLUSH PRIVILEGES;
+    mysql> exit;
+    ```
+3. Install dependencies:
     ```
     # automatically install python dependencies
-    $ python3 -m pip install -r requirements.txt
+    $ screen -SRD tamugd-parser
+    $ python3 -m venv tamugd-parser-venv
+    $ source tamugd-parser-venv/bin/activate
+    $ pip install -r requirements.txt
     ```
-3. Generate prefs.json and update file:
+4. Generate prefs.json and update file:
     ```
     # run in TAMU-GradeDistribution-ParserV2
     $ python3 src/gd_main.py
     $ nano prefs.json
     ```
-4. Run main python script:
+5. Run main python script:
     ```
-    # NOTE: building the database will take a while
+    # NOTE: building the database will take a while (detatch screen with CTRL+A then CTRL+D after running main script)
     $ python3 src/gd_main.py
     ```
-5. Monitor created logfile (optional):
+6. Monitor created logfile (optional):
     ```
     # automatically get and display newest logfile
     $ cd logs
