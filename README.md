@@ -17,9 +17,8 @@ This project is dedicated to helping analyze the massive amounts of data release
 
 
 ## How to use:
-1. Set up mySQL table:
+1. Set up mySQL database and table:
     ```
-    # create mySQL database table
     $ sudo mysql
     mysql> CREATE DATABASE database_name_here;
     mysql> USE database_name_here;
@@ -46,37 +45,34 @@ This project is dedicated to helping analyze the massive amounts of data release
            );
     mysql> exit;
     ```
-2. Create database user:
+2. Create database user and grant permissions:
     ```
-    # create database user
     $ sudo mysql
     mysql> CREATE USER 'database_user_name_here'@'localhost' IDENTIFIED BY 'database_user_password_here';
     mysql> GRANT ALL PRIVILEGES ON database_name_here.* TO 'database_user_name_here'@'localhost';
     mysql> FLUSH PRIVILEGES;
     mysql> exit;
     ```
-3. Install dependencies:
+3. Create virtual environment and install python dependencies:
     ```
-    # automatically install python dependencies
     $ screen -SRD tamugd-parser
     $ python3 -m venv tamugd-parser-venv
     $ source tamugd-parser-venv/bin/activate
     $ pip install -r requirements.txt
     ```
-4. Generate prefs.json and update file:
+4. Generate prefs.json and update file contents:
     ```
-    # run in TAMU-GradeDistribution-ParserV2
     $ python3 src/gd_main.py
     $ nano prefs.json
     ```
 5. Run main python script:
     ```
-    # NOTE: building the database will take a while (detatch screen with CTRL+A then CTRL+D after running main script)
+    # NOTE: building the database will take a while (detatch screen with CTRL+A,D after running main script to run in background)
     $ python3 src/gd_main.py
     ```
 6. Monitor created logfile (optional):
     ```
-    # automatically get and display newest logfile
+    # automatically find and display newest logfile
     $ cd logs
     $ tail -f $(ls -t | head -1)
     ```
