@@ -10,15 +10,15 @@ This project is dedicated to helping analyze the massive amounts of data release
 
 
 ## Version 2.0 Roadmap:
-- [x] Grade report parsing
-- [x] Automatically add data to a mySQL database backend
-- [x] Full rewrite with multithreading
+- [x] <s>Grade report parsing</s>
+- [x] <s>Automatically add data to a mySQL database backend</s>
+- [x] <s>Full rewrite with multithreading</s>
 - [ ] Fully automated grade report updates (auto add new reports)
 
 
 ## How to use:
 1. Set up mySQL table:
-    ```
+    ```bash
     # create mySQL database table
     $ sudo mysql
     mysql> CREATE DATABASE database_name_here;
@@ -47,7 +47,7 @@ This project is dedicated to helping analyze the massive amounts of data release
     mysql> exit;
     ```
 2. Create database user:
-    ```
+    ```bash
     # create database user
     $ sudo mysql
     mysql> CREATE USER 'database_user_name_here'@'localhost' IDENTIFIED BY 'database_user_password_here';
@@ -56,7 +56,7 @@ This project is dedicated to helping analyze the massive amounts of data release
     mysql> exit;
     ```
 3. Install dependencies:
-    ```
+    ```bash
     # automatically install python dependencies
     $ screen -SRD tamugd-parser
     $ python3 -m venv tamugd-parser-venv
@@ -64,18 +64,18 @@ This project is dedicated to helping analyze the massive amounts of data release
     $ pip install -r requirements.txt
     ```
 4. Generate prefs.json and update file:
-    ```
+    ```bash
     # run in TAMU-GradeDistribution-ParserV2
     $ python3 src/gd_main.py
     $ nano prefs.json
     ```
 5. Run main python script:
-    ```
+    ```bash
     # NOTE: building the database will take a while (detatch screen with CTRL+A then CTRL+D after running main script)
     $ python3 src/gd_main.py
     ```
 6. Monitor created logfile (optional):
-    ```
+    ```bash
     # automatically get and display newest logfile
     $ cd logs
     $ tail -f $(ls -t | head -1)
