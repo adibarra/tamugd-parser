@@ -41,7 +41,7 @@ class DatabaseHandler:
 
     @staticmethod
     def send_query(message: str):
-        """Send a querty to the database server.
+        """Send a query to the database server.
         Parameters:
             message (str): The command to send to the MySQL database
         Returns:
@@ -62,6 +62,30 @@ class DatabaseHandler:
             return 'ERROR '+str(ex)
         return results
 
+    @staticmethod
+    def set_sync_percentage(sync_percentage: int):
+        """Set the sync percentage for the database.
+        Parameters:
+            sync_percentage (int): Integer representing the sync percentage
+        Returns:
+            tuple: Will return tuple of tuples containing the result if no error was encountered
+            str: Will return a string if an error was encountered
+        """
+
+        try:
+            database = pymysql.connect(host=PreferenceLoader.db_address, user=PreferenceLoader.db_user,
+                                       password=PreferenceLoader.db_pass, database=PreferenceLoader.db_name, autocommit=True)
+            cursor = database.cursor()
+            # Logger.log('>>> Executing DB Query: '+message, Importance.DBUG)
+            cursor.execute('TRUNCATE TABLE status;')
+            cursor.execute('INSERT INTO status (item,value) values ("SYNCING",'+str(sync_percentage != 100)+');')
+            cursor.execute('INSERT INTO status (item,value) values ("SYNC_PERC",'+str(sync_percentage)+');')
+            results = cursor.fetchall()
+            database.close()
+        except Exception as ex:
+            Logger.log('>>> Error Executing DB Query: ERROR '+str(ex), Importance.CRIT)
+            return 'ERROR '+str(ex)
+        return results
 
     @staticmethod
     def add_grade_entries(table_name: str, entry_list: list):

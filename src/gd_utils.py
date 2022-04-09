@@ -25,10 +25,13 @@ class Utils:
             Logger.log('Starting up at '+time.strftime("%Y-%m-%d %H:%M:%S"), importance=None)
             if DatabaseHandler.check_db_connection():
                 Logger.log('Database connection established!', importance=None)
+                Logger.log('-----------------------\n', importance=None)
+                DatabaseHandler.set_sync_percentage(0)
             else:
                 Logger.log('>>> Unable to establish database connection <<<', Importance.CRIT)
                 Logger.log(' '*27+DatabaseHandler.check_db_connection_error(), importance=None)
-            Logger.log('-----------------------\n', importance=None)
+                Logger.log('-----------------------\n', importance=None)
+                sys.exit(0)
         else:
             Logger.log('Failed to load Preferences file. (See console for details).', importance=None)
             Logger.log('-----------------------\n', importance=None)
@@ -37,6 +40,7 @@ class Utils:
     # all shutdown tasks go here to declutter the main file
     @staticmethod
     def shutdown() -> None:
+        DatabaseHandler.set_sync_percentage(100)
         Logger.log('\n-----------------------\nGoodbye...\n-----------------------\n\n\n', importance=None)
 
     # convert parsed list into database format

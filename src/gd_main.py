@@ -68,15 +68,13 @@ def load_pdf(download_url: str, no_dl=False) -> str:
 # process given PDFdata
 def process_pdf(pdf_data: Tuple) -> None:
     try:
-        year, semester, college, progress_bar = pdf_data
+        year, semester, college = pdf_data
         pdflink = PDF_BASE_LINK.format(year+semester, college)
         pdf_file_path = load_pdf(pdflink, no_dl=(year in LEGACY_YEAR_DATA))
         grades_list = PDFParser.parse_grades_pdf(pdf_file_path)
         DatabaseHandler.add_grade_entries('tamugrades', grades_list)
     except Exception:
         Logger.log('Unable to parse PDF('+pdf_file_path.split('/')[-1]+')', Importance.WARN)
-    finally:
-        progress_bar(1)
 
 
 # main
@@ -84,6 +82,7 @@ def main() -> None:
     # complete startup tasks
     Utils.startup()
     print('Check the latest log file to see database build progress')
+    DatabaseHandler.send_query('TRUNCATE TABLE tamugrades;')
 
     with alive_bar(title='Scraping metadata'):
         semesters = ['1','2','3']
@@ -98,18 +97,21 @@ def main() -> None:
         # UT=University Totals
         # PROF=Professional, format not yet supported
 
-    with alive_bar(total=len(years)*len(semesters)*len(colleges),title='Building database') as progress_bar:
+    num_pdfs = len(years)*len(semesters)*len(colleges)
+    with alive_bar(total=num_pdfs,title='Building database') as progress_bar:
         # generate pdf urls
         pdf_data = []
         for year in years[::-1]:
             for semester in semesters:
                 for college in colleges:
-                    pdf_data.append([year,semester,college,progress_bar])
+                    pdf_data.append([year,semester,college])
 
         # automatically load pdfs from pdfs list
         try:
-            with ThreadPoolExecutor() as executor:
-                executor.map(process_pdf, pdf_data)
+            for i in range(0, len(pdf_data)): # pylint: disable=consider-using-enumerate
+                process_pdf(pdf_data[i])
+                progress_bar() # pylint: disable=not-callable
+                DatabaseHandler.set_sync_percentage(round(i/num_pdfs*100))
         except KeyboardInterrupt:
             Logger.log('KeyboardInterrupt recieved: Exiting', importance=None)
             Utils.shutdown()
