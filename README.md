@@ -44,6 +44,10 @@ This project is dedicated to helping analyze the massive amounts of data release
                numQ SMALLINT(3),
                numX SMALLINT(3)
            );
+    mysql> CREATE TABLE status (
+               item VARCHAR(10),
+               value BOOLEAN
+           );
     mysql> exit;
     ```
 2. Create database user:
