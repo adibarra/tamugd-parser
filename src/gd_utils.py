@@ -22,7 +22,7 @@ class Utils:
         Logger.log('-----------------------', importance=None)
         if PreferenceLoader.load_prefs():
             Logger.log('Loaded Preferences file.', importance=None)
-            Logger.log('Starting up at '+time.strftime("%Y-%m-%d %H:%M:%S"), importance=None)
+            Logger.log(f'Starting up at {time.strftime("%Y-%m-%d %H:%M:%S")}', importance=None)
             if DatabaseHandler.check_db_connection():
                 Logger.log('Database connection established!', importance=None)
                 Logger.log('-----------------------\n', importance=None)
@@ -50,11 +50,15 @@ class Utils:
         try:
             for entry in to_convert:
                 if len(entry) == 20 and 'TOTAL'.upper() not in str(entry[0]).upper():
-                    converted_list += [[year, semster, entry[0].split('-')[0], entry[0].split('-')[1], entry[0].split('-')[2], int(entry[1]), int(entry[3]), int(entry[5]),
-                                       int(entry[7]), int(entry[9]), float(entry[12]), int(entry[13]), int(entry[14]), int(entry[15]), int(entry[16]), int(entry[17]), int(entry[18]), entry[19]]]
+                    converted_list += [[year, semster, entry[0].split('-')[0], entry[0].split('-')[1], entry[0].split('-')[2],
+                                    int(entry[1]), int(entry[3]), int(entry[5]), int(entry[7]), int(entry[9]), float(entry[12]), int(entry[13]),
+                                    int(entry[14]), int(entry[15]), int(entry[16]), int(entry[17]), int(entry[18]), entry[19]]]
         except Exception:
-            print('BAD ENTRY DURING CONVERSION:\n'+str(entry)+'\n'+str([year, semster, entry[0].split('-')[0], entry[0].split('-')[1], entry[0].split('-')[2], entry[1], entry[3], entry[5],
-                entry[7], entry[9], float(entry[12]), entry[13], entry[14], entry[15], entry[16], entry[17], entry[18], entry[19]])+'\n')
+            tmp = [year, semster, entry[0].split("-")[0], entry[0].split("-")[1], entry[0].split("-")[2],
+                    entry[1], entry[3], entry[5], entry[7], entry[9], float(entry[12]),
+                    entry[13], entry[14], entry[15], entry[16], entry[17], entry[18], entry[19]
+                ]
+            print(f'BAD ENTRY DURING CONVERSION:\n{entry}\n{tmp}\n')
         return converted_list
 
     # check if the section number is a honors section

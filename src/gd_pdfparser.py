@@ -16,7 +16,7 @@ class PDFParser:
     # parse grade report pdf
     @staticmethod
     def parse_grades_pdf(pdf_file_path: str) -> List:
-        Logger.log('Started parsing full PDF('+pdf_file_path.split('/')[-1]+')', Importance.INFO)
+        Logger.log(f'Started parsing full PDF({pdf_file_path.split("/")[-1]})', Importance.INFO)
         try:
             with open(pdf_file_path,'rb') as pdf_file:
                 pdf_reader = PyPDF2.PdfFileReader(pdf_file)
@@ -67,5 +67,5 @@ class PDFParser:
                             output_list.append(new_course)
                 return output_list
         except PyPDF2.utils.PdfReadError:
-            print('Bad or missing PDF: '+pdf_file_path)
+            print(f'Bad or missing PDF: {pdf_file_path}')
             return []

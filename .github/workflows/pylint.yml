@@ -19,6 +19,6 @@ jobs:
         pip install -r requirements.txt
         pip install pylint
         pip install pylint-exit
-    - name: Analysing the code with pylint
+    - name: Analyzing the code with pylint
       run: |
         pylint $(find . -name "*.py" | xargs) --max-line-length=240 --disable="broad-except,unspecified-encoding" || pylint-exit $?

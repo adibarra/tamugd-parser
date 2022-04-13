@@ -3,7 +3,6 @@
 
 
 # imports
-from concurrent.futures import ThreadPoolExecutor
 from typing import List, Tuple
 
 import os
@@ -42,25 +41,25 @@ def load_pdf(download_url: str, no_dl=False) -> str:
     file_path = PDF_SAVE_DIR+file_name
 
     def download_pdf():
-        Logger.log('Downloading PDF('+file_name+').', Importance.INFO)
+        Logger.log(f'Downloading PDF({file_name}).', Importance.INFO)
         response = requests.get(download_url)
         with open(file_path,'wb+') as file:
             file.write(response.content)
-        Logger.log('Finished downloading and saving PDF('+file_name+').', Importance.INFO)
+        Logger.log(f'Finished downloading and saving PDF({file_name}).', Importance.INFO)
 
     if no_dl:
-        Logger.log('[NO DOWNLOAD] PDF('+file_name+') download forcibly skipped.', Importance.INFO)
+        Logger.log(f'[NO DOWNLOAD] PDF({file_name}) download forcibly skipped.', Importance.INFO)
         return file_path
 
     if os.path.exists(file_path):
         if OVERWRITE_ALL_PDF:
-            Logger.log('PDF('+file_name+') already exists. Overwriting.', Importance.INFO)
+            Logger.log(f'PDF({file_name}) already exists. Overwriting.', Importance.INFO)
             download_pdf()
         else:
-            Logger.log('PDF('+file_name+') already exists. Skipping download.', Importance.INFO)
+            Logger.log(f'PDF({file_name}) already exists. Skipping download.', Importance.INFO)
     else:
         os.makedirs(''.join(file_path.split('/')[:-1]), exist_ok=True)
-        Logger.log('PDF('+file_name+') does not exist. Downloading.', Importance.INFO)
+        Logger.log(f'PDF({file_name}) does not exist. Downloading.', Importance.INFO)
         download_pdf()
     return file_path
 
@@ -74,7 +73,8 @@ def process_pdf(pdf_data: Tuple) -> None:
         grades_list = PDFParser.parse_grades_pdf(pdf_file_path)
         DatabaseHandler.add_grade_entries('tamugrades', grades_list)
     except Exception:
-        Logger.log('Unable to parse PDF('+pdf_file_path.split('/')[-1]+')', Importance.WARN)
+        pdf_name = pdf_file_path.split('/')[-1]
+        Logger.log(f'Unable to parse PDF({pdf_name})', Importance.WARN)
 
 
 # main
@@ -84,7 +84,7 @@ def main() -> None:
     print('Check the latest log file to see database build progress')
     DatabaseHandler.send_query('TRUNCATE TABLE tamugrades;')
 
-    with alive_bar(title='Scraping metadata'):
+    with alive_bar(total=1,title='Scraping metadata') as progress_bar:
         semesters = ['1','2','3']
         years, colleges = scrape_report_metadata()
         years = years+LEGACY_YEAR_DATA
@@ -96,9 +96,10 @@ def main() -> None:
         # QT=TAMU-Qatar
         # UT=University Totals
         # PROF=Professional, format not yet supported
+        progress_bar(1.0) # pylint: disable=not-callable
 
     num_pdfs = len(years)*len(semesters)*len(colleges)
-    with alive_bar(total=num_pdfs,title='Building database') as progress_bar:
+    with alive_bar(total=num_pdfs,dual_line=True,title='Building database') as progress_bar:
         # generate pdf urls
         pdf_data = []
         for year in years[::-1]:
@@ -108,10 +109,12 @@ def main() -> None:
 
         # automatically load pdfs from pdfs list
         try:
-            for i in range(0, len(pdf_data)): # pylint: disable=consider-using-enumerate
-                process_pdf(pdf_data[i])
+            sem = ['SPRING','SUMMER','FALL']
+            for pdf in pdf_data:
+                progress_bar.text = f'  -> Processing: {pdf[0]} {sem[int(pdf[1])-1]} {pdf[2]}'
+                process_pdf(pdf)
                 progress_bar() # pylint: disable=not-callable
-                DatabaseHandler.set_sync_percentage(round(i/num_pdfs*100))
+                DatabaseHandler.set_sync_percentage(round(progress_bar.current()/num_pdfs*100))
         except KeyboardInterrupt:
             Logger.log('KeyboardInterrupt recieved: Exiting', importance=None)
             Utils.shutdown()

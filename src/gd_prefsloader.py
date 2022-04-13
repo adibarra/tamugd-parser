@@ -34,16 +34,16 @@ class PreferenceLoader:
 
         try:
             # check if path to preferences file exists else create
-            if not os.path.exists(os.path.dirname(os.path.realpath(__file__))+'/'+PreferenceLoader.preferences_location):
+            if not os.path.exists(f'{os.path.dirname(os.path.realpath(__file__))}/{PreferenceLoader.preferences_location}'):
                 original_umask = os.umask(0)
-                os.makedirs(os.path.dirname(os.path.realpath(__file__))+'/'+PreferenceLoader.preferences_location)
+                os.makedirs(f'{os.path.dirname(os.path.realpath(__file__))}/{PreferenceLoader.preferences_location}')
                 os.umask(original_umask)
         except Exception as ex:
-            print('There was an error while trying to create the '+PreferenceLoader.preferences_location+' directory:')
+            print(f'There was an error while trying to create the {PreferenceLoader.preferences_location} directory:')
             print(ex)
 
         # check if preferences file exists else create
-        file_name = os.path.dirname(os.path.realpath(__file__))+'/'+PreferenceLoader.preferences_location+PreferenceLoader.preference_file
+        file_name = f'{os.path.dirname(os.path.realpath(__file__))}/{PreferenceLoader.preferences_location}{PreferenceLoader.preference_file}'
         if not os.path.isfile(file_name):
             try:
                 # create preferences file with default settings
@@ -51,7 +51,7 @@ class PreferenceLoader:
                     json.dump(filecontents, json_file, indent=4)
                     generated = True
             except Exception as ex:
-                print('There was an error while trying to create the '+PreferenceLoader.preference_file+' file:')
+                print(f'There was an error while trying to create the {PreferenceLoader.preference_file} file:')
                 print(ex)
 
         return generated
@@ -59,12 +59,12 @@ class PreferenceLoader:
     @staticmethod
     def load_prefs():
         if PreferenceLoader.generate_prefs_file():
-            print('Generated preferences file ('+PreferenceLoader.preferences_location+PreferenceLoader.preference_file+')')
+            print(f'Generated preferences file ({PreferenceLoader.preferences_location}{PreferenceLoader.preference_file})')
             print('Fill it out then restart the script when you are ready.')
             return False
 
         try:
-            file_path = os.path.dirname(os.path.realpath(__file__))+'/'+PreferenceLoader.preferences_location+PreferenceLoader.preference_file
+            file_path = f'{os.path.dirname(os.path.realpath(__file__))}/{PreferenceLoader.preferences_location}{PreferenceLoader.preference_file}'
             with open(file_path,'r') as json_file:
                 prefs = json.load(json_file)
 

@@ -32,16 +32,16 @@ class Logger:
             return
         # if logs folder does not exist then create it
         try:
-            if not os.path.exists(os.path.dirname(os.path.realpath(__file__))+'/../logs'):
+            if not os.path.exists(f'{os.path.dirname(os.path.realpath(__file__))}/../logs'):
                 original_umask = os.umask(0)
-                os.makedirs(os.path.dirname(os.path.realpath(__file__))+'/../logs')
+                os.makedirs(f'{os.path.dirname(os.path.realpath(__file__))}/../logs')
                 os.umask(original_umask)
         except Exception as ex:
             print('There was an error while trying to create the logs directory:')
             print(ex)
 
         # if logfile for today does not exist then create it
-        file_path = os.path.dirname(os.path.realpath(__file__))+'/../logs/'+time.strftime('log-%Y-%m-%d')+'.log'
+        file_path = f'{os.path.dirname(os.path.realpath(__file__))}/../logs/{time.strftime("log-%Y-%m-%d")}.log'
         if not os.path.isfile(file_path):
             try:
                 with open(file_path,'a') as log_file:
@@ -54,26 +54,26 @@ class Logger:
         try:
             with open(file_path,'a') as log_file:
                 if importance is None:
-                    log_file.write(message+'\n')
+                    log_file.write(f'{message}\n')
                 else:
-                    log_file.write(time.strftime('%Y-%m-%d %H:%M:%S')+' ['+importance.name+'] '+message+'\n')
+                    log_file.write(f'{time.strftime("%Y-%m-%d %H:%M:%S")} [{importance.name}] {message}\n')
 
             # if logfile goes over MAX_LOGFILE_SIZE, rename current logfile and later autocreate another
             if os.stat(file_path).st_size > Logger.MAX_LOGFILE_SIZE:
                 log_number = 0
                 # iterate through logs for the day and find largest logfile number
-                for name in glob.glob(file_path[:len(file_path)-4]+'*'):
+                for name in glob.glob(f'{file_path[:len(file_path)-4]}*'):
                     if len(name.split('/')[-1].split('.')) > 2:
                         num = int(name.split('/')[-1].split('.')[1])
                         if num > log_number:
                             log_number = num
 
                 # rename current log to largest log number +1 then zip and delete original
-                file_name = (file_path[:len(file_path)-4]+'.'+str(log_number+1)+'.log').split('/')[-1]
-                os.rename(file_path, file_path[:len(file_path)-4]+'.'+str(log_number+1)+'.log')
-                with ZipFile(file_path[:len(file_path)-4]+'.'+str(log_number+1)+'.log.zip', 'w', zipfile.ZIP_BZIP2) as zip_file:
-                    zip_file.write(file_path[:len(file_path)-4]+'.'+str(log_number+1)+'.log', file_name)
-                os.remove(file_path[:len(file_path)-4]+'.'+str(log_number+1)+'.log')
+                file_name = (f'{file_path[:len(file_path)-4]}.{log_number+1}.log').split('/')[-1]
+                os.rename(file_path, f'{file_path[:len(file_path)-4]}.{log_number+1}.log')
+                with ZipFile(f'{file_path[:len(file_path)-4]}.{log_number+1}.log.zip', 'w', zipfile.ZIP_BZIP2) as zip_file:
+                    zip_file.write(f'{file_path[:len(file_path)-4]}.{log_number+1}.log', file_name)
+                os.remove(f'{file_path[:len(file_path)-4]}.{log_number+1}.log')
 
         except Exception:
             print('There was an error when reading or writing a file:')

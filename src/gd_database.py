@@ -36,7 +36,7 @@ class DatabaseHandler:
             cursor.fetchall()
             database.close()
         except Exception as ex:
-            return str(ex.args[0])+': '+str(ex.args[1])
+            return f'{ex.args[0]}: {ex.args[1]}'
         return 'No Error'
 
     @staticmethod
@@ -53,13 +53,13 @@ class DatabaseHandler:
             database = pymysql.connect(host=PreferenceLoader.db_address, user=PreferenceLoader.db_user,
                                        password=PreferenceLoader.db_pass, database=PreferenceLoader.db_name, autocommit=True)
             cursor = database.cursor()
-            # Logger.log('>>> Executing DB Query: '+message, Importance.DBUG)
+            # Logger.log(f'>>> Executing DB Query: {message}', Importance.DBUG)
             cursor.execute(message)
             results = cursor.fetchall()
             database.close()
         except Exception as ex:
-            Logger.log('>>> Error Executing DB Query: ERROR '+str(ex), Importance.CRIT)
-            return 'ERROR '+str(ex)
+            Logger.log(f'>>> Error Executing DB Query: ERROR {ex}', Importance.CRIT)
+            return f'ERROR {ex}'
         return results
 
     @staticmethod
@@ -76,15 +76,15 @@ class DatabaseHandler:
             database = pymysql.connect(host=PreferenceLoader.db_address, user=PreferenceLoader.db_user,
                                        password=PreferenceLoader.db_pass, database=PreferenceLoader.db_name, autocommit=True)
             cursor = database.cursor()
-            # Logger.log('>>> Executing DB Query: '+message, Importance.DBUG)
+            # Logger.log(f'>>> Executing DB Query: {message}', Importance.DBUG)
             cursor.execute('TRUNCATE TABLE status;')
-            cursor.execute('INSERT INTO status (item,value) values ("SYNCING",'+str(sync_percentage != 100)+');')
-            cursor.execute('INSERT INTO status (item,value) values ("SYNC_PERC",'+str(sync_percentage)+');')
+            cursor.execute(f'INSERT INTO status (item,value) values ("SYNCING",{sync_percentage != 100});')
+            cursor.execute(f'INSERT INTO status (item,value) values ("SYNC_PERC",{sync_percentage});')
             results = cursor.fetchall()
             database.close()
         except Exception as ex:
-            Logger.log('>>> Error Executing DB Query: ERROR '+str(ex), Importance.CRIT)
-            return 'ERROR '+str(ex)
+            Logger.log(f'>>> Error Executing DB Query: ERROR {ex}', Importance.CRIT)
+            return f'ERROR {ex}'
         return results
 
     @staticmethod
@@ -98,19 +98,17 @@ class DatabaseHandler:
             str: Will return a string if an error was encountered
         """
 
-        def split_to_string(entry: list):
+        def split_to_string(i: list):
             # [year,semester,college,departmentName,course,section,honors,avgGPA,professorName,A,B,C,D,F,I,S,U,Q,X]
-            return ('('+str(entry[ 0])+',"'+str(entry[ 1])+'","'+str(entry[ 2])+'","'+str(entry[ 3])+'","'+str(entry[ 4])+'","'+str(entry[ 5])+'",'+str(entry[ 6])+','
-                       +str(entry[ 7])+',"'+str(entry[ 8])+'",' +str(entry[ 9])+ ',' +str(entry[10])+ ',' +str(entry[11])+ ',' +str(entry[12])+ ','+str(entry[13])+','
-                       +str(entry[14])+',' +str(entry[15])+ ',' +str(entry[16])+ ',' +str(entry[17])+ ',' +str(entry[18])+ ')')
+            return (f'({i[0]},"{i[1]}","{i[2]}","{i[3]}","{i[4]}","{i[5]}",{i[6]},{i[7]},"{i[8]}",'+
+                    f'{i[9]},{i[10]},{i[11]},{i[12]},{i[13]},{i[14]},{i[15]},{i[16]},{i[17]},{i[18]})')
 
         try:
             Logger.log('Started adding new records to database', Importance.INFO)
             if isinstance(entry_list,list) and len(entry_list) > 0 and not isinstance(entry_list[0],list):
-                # Logger.log('Adding new entry to '+table_name, Importance.DBUG)
-                results = DatabaseHandler.send_query('INSERT INTO '+table_name+' '
-                    +'(year,semester,college,departmentName,course,section,honors,avgGPA,professorName,numA,numB,numC,numD,numF,numI,numS,numU,numQ,numX) VALUES '
-                    +split_to_string(entry_list)+';')
+                # Logger.log(f'Adding new entry to {table_name}', Importance.DBUG)
+                results = DatabaseHandler.send_query(f'INSERT INTO {table_name} '+
+                f'(year,semester,college,departmentName,course,section,honors,avgGPA,professorName,numA,numB,numC,numD,numF,numI,numS,numU,numQ,numX) VALUES {split_to_string(entry_list)};')
 
             elif isinstance(entry_list,list) and len(entry_list) > 0 and isinstance(entry_list[0],list):
                 to_add = ''
@@ -122,7 +120,7 @@ class DatabaseHandler:
                     to_add += split_to_string(entry)+'@'
 
                 to_add = to_add[:-1]
-                # Logger.log('Adding new entries to '+tableName, Importance.DBUG)
+                # Logger.log(f'Adding new entries to {table_name}', Importance.DBUG)
 
                 # add batchSize at a time until out of records then the remainder
                 to_add_split = to_add.split('@')
@@ -144,8 +142,8 @@ class DatabaseHandler:
                         combined += to_add_split[k]+','
 
                     if combined[:-1] != '':
-                        results += DatabaseHandler.send_query('INSERT INTO '+table_name+' '
-                            +'(year,semester,college,departmentName,course,section,honors,avgGPA,professorName,numA,numB,numC,numD,numF,numI,numS,numU,numQ,numX) VALUES '+combined[:-1]+';')
+                        results += DatabaseHandler.send_query(f'INSERT INTO {table_name}'+
+                        f'(year,semester,college,departmentName,course,section,honors,avgGPA,professorName,numA,numB,numC,numD,numF,numI,numS,numU,numQ,numX) VALUES {combined[:-1]};')
                     else:
                         rows_added -= 1
 
@@ -154,8 +152,8 @@ class DatabaseHandler:
             elif len(entry_list) == 0:
                 return ()
         except Exception as ex:
-            print('>>> Error Executing DB Query: ERROR '+str(ex))
-            Logger.log('>>> Error Executing DB Query: ERROR '+str(ex), Importance.WARN)
-            return 'ERROR '+str(ex)
-        Logger.log('Finished adding new records('+str(rows_added)+') to database', Importance.INFO)
+            print(f'>>> Error Executing DB Query: ERROR {ex}')
+            Logger.log(f'>>> Error Executing DB Query: ERROR {ex}', Importance.CRIT)
+            return f'ERROR {ex}'
+        Logger.log(f'Finished adding new records({rows_added}) to database', Importance.INFO)
         return results
