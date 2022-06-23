@@ -82,6 +82,31 @@ def main() -> None:
     # complete startup tasks
     Utils.startup()
     print('Check the latest log file to see database build progress')
+    DatabaseHandler.send_query('CREATE TABLE IF NOT EXISTS tamugrades ('
+        +'year SMALLINT(4),'
+        +'semester VARCHAR(6),'
+        +'college VARCHAR(7),'
+        +'departmentName VARCHAR(5),'
+        +'course VARCHAR(4),'
+        +'section VARCHAR(3),'
+        +'honors TINYINT(1),'
+        +'avgGPA FLOAT(4,3),'
+        +'professorName VARCHAR(30),'
+        +'numA SMALLINT(3),'
+        +'numB SMALLINT(3),'
+        +'numC SMALLINT(3),'
+        +'numD SMALLINT(3),'
+        +'numF SMALLINT(3),'
+        +'numI SMALLINT(3),'
+        +'numS SMALLINT(3),'
+        +'numU SMALLINT(3),'
+        +'numQ SMALLINT(3),'
+        +'numX SMALLINT(3)'
+        +');')
+    DatabaseHandler.send_query('CREATE TABLE IF NOT EXISTS status ('
+        +'item VARCHAR(10),'
+        +'value BOOLEAN'
+        +');')
     DatabaseHandler.send_query('TRUNCATE TABLE tamugrades;')
 
     with alive_bar(total=1,title='Scraping metadata') as progress_bar:
