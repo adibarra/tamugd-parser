@@ -17,45 +17,16 @@ This project is dedicated to helping analyze the massive amounts of data release
 
 
 ## How to use:
-1. Set up mySQL table:
+1. Open MySQL:
     ```bash
-    # create mySQL database table
+    # open sql prompt
     $ sudo mysql
-    mysql> CREATE DATABASE database_name_here;
-    mysql> USE database_name_here;
-    mysql> CREATE TABLE database_table_name_here (
-               year SMALLINT(4),
-               semester VARCHAR(6),
-               college VARCHAR(7),
-               departmentName VARCHAR(5),
-               course VARCHAR(4),
-               section VARCHAR(3),
-               honors TINYINT(1),
-               avgGPA FLOAT(4,3),
-               professorName VARCHAR(30),
-               numA SMALLINT(3),
-               numB SMALLINT(3),
-               numC SMALLINT(3),
-               numD SMALLINT(3),
-               numF SMALLINT(3),
-               numI SMALLINT(3),
-               numS SMALLINT(3),
-               numU SMALLINT(3),
-               numQ SMALLINT(3),
-               numX SMALLINT(3)
-           );
-    mysql> CREATE TABLE status (
-               item VARCHAR(10),
-               value BOOLEAN
-           );
-    mysql> exit;
     ```
-2. Create database user:
-    ```bash
-    # create database user
-    $ sudo mysql
+2. Create mySQL database and user:
+    ```sql
+    mysql> CREATE DATABASE tamugradesDB;
     mysql> CREATE USER 'database_user_name_here'@'localhost' IDENTIFIED BY 'database_user_password_here';
-    mysql> GRANT ALL PRIVILEGES ON database_name_here.* TO 'database_user_name_here'@'localhost';
+    mysql> GRANT ALL PRIVILEGES ON tamugradesDB.* TO 'database_user_name_here'@'localhost';
     mysql> FLUSH PRIVILEGES;
     mysql> exit;
     ```
