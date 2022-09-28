@@ -16,7 +16,7 @@ This project is dedicated to helping analyze the massive amounts of data release
 - [ ] Fully automated grade report updates (auto add new reports)
 
 
-## How to use:
+## How to set up:
 1. Open MySQL:
     ```bash
     # open sql prompt
@@ -44,14 +44,32 @@ This project is dedicated to helping analyze the massive amounts of data release
     $ python3 src/gd_main.py
     $ nano prefs.json
     ```
-5. Run main python script:
+
+## Legacy PDFs:
+A legacy PDF is a PDF which you have already downloaded. This is useful if you want to add data from a PDF which is not currently available on the Registrar's website.
+
+## How to run:
+### If you DO NOT have legacy pdfs
+1. Run main python script:
     ```bash
     # NOTE: building the database will take a while (detatch screen with CTRL+A then CTRL+D after running main script)
     $ python3 src/gd_main.py
     ```
-6. Monitor created logfile (optional):
+
+### If you DO have legacy pdfs
+1. Run main python script:
     ```bash
-    # automatically get and display newest logfile
-    $ cd logs
-    $ tail -f $(ls -t | head -1)
+    # NOTE: building the database will take a while (detatch screen with CTRL+A then CTRL+D after running main script)
+
+    # display help menu
+    $ python3 src/gd_main.py --help
+    # try adding legacy pdfs from 2014 to most recent downloadable pdf
+    $ python3 src/gd_main.py --start-year-legacy 2014
     ```
+
+
+Once the script is running you can monitor its progress by using the following command:
+```bash
+# automatically get and display a live feed from the newest logfile
+$ cd logs && tail -f $(ls -t | head -1)
+```

@@ -6,7 +6,6 @@
 import re
 import sys
 import time
-from typing import List
 from gd_logger import Logger, Importance
 from gd_database import DatabaseHandler
 from gd_prefsloader import PreferenceLoader
@@ -45,7 +44,7 @@ class Utils:
 
     # convert parsed list into database format
     @staticmethod
-    def convert_to_entries(to_convert: list, year: int, semster: str) -> List:
+    def convert_to_entries(to_convert: list, year: int, semster: str) -> list:
         converted_list = []
         try:
             for entry in to_convert:
@@ -68,3 +67,11 @@ class Utils:
         reg2 = re.compile('58[0-9]{1,}')
         return (len(reg1.findall(section)) > 0 or
                 len(reg2.findall(section)) > 0)
+
+    # expands [2017,2021] into [2017,2018,2019,2020,2021]
+    @staticmethod
+    def interpolate_num_list(num_list: list[int], step_size: int) -> list[int]:
+        new_list = [int(num_list[0])]
+        while (new_list[len(new_list)-1] < int(num_list[len(num_list)-1])):
+            new_list.append(new_list[len(new_list)-1] + step_size)
+        return new_list
