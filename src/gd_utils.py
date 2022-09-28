@@ -25,7 +25,7 @@ class Utils:
             if DatabaseHandler.check_db_connection():
                 Logger.log('Database connection established!', importance=None)
                 Logger.log('-----------------------\n', importance=None)
-                DatabaseHandler.set_sync_percentage(0)
+                DatabaseHandler.set_build_percentage(0)
             else:
                 Logger.log('>>> Unable to establish database connection <<<', Importance.CRIT)
                 Logger.log(' '*27+DatabaseHandler.check_db_connection_error(), importance=None)
@@ -39,7 +39,7 @@ class Utils:
     # all shutdown tasks go here to declutter the main file
     @staticmethod
     def shutdown() -> None:
-        DatabaseHandler.set_sync_percentage(100)
+        DatabaseHandler.set_build_percentage(100)
         Logger.log('\n-----------------------\nGoodbye...\n-----------------------\n\n\n', importance=None)
 
     # convert parsed list into database format

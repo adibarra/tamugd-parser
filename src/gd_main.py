@@ -83,7 +83,7 @@ def main(legacy_start_year: Optional[str], legacy_end_year: Optional[str]) -> No
     # complete startup tasks
     Utils.startup()
     print('Check the latest log file to see database build progress')
-    DatabaseHandler.send_query('CREATE TABLE IF NOT EXISTS '+PreferenceLoader.db_grades_table+' ('
+    DatabaseHandler.send_query(f'CREATE TABLE IF NOT EXISTS {PreferenceLoader.db_grades_table} ('
         +'year SMALLINT(4),'
         +'semester VARCHAR(6),'
         +'college VARCHAR(7),'
@@ -104,12 +104,12 @@ def main(legacy_start_year: Optional[str], legacy_end_year: Optional[str]) -> No
         +'numQ SMALLINT(3),'
         +'numX SMALLINT(3)'
         +');')
-    DatabaseHandler.send_query('CREATE TABLE IF NOT EXISTS '+PreferenceLoader.db_status_table+' ('
+    DatabaseHandler.send_query(f'CREATE TABLE IF NOT EXISTS {PreferenceLoader.db_status_table} ('
         +'item VARCHAR(10),'
         +'value SMALLINT(3)'
         +');')
-    DatabaseHandler.send_query('TRUNCATE TABLE '+PreferenceLoader.db_grades_table+';')
-    DatabaseHandler.send_query('TRUNCATE TABLE '+PreferenceLoader.db_status_table+';')
+    DatabaseHandler.send_query(f'TRUNCATE TABLE {PreferenceLoader.db_grades_table};')
+    DatabaseHandler.send_query(f'TRUNCATE TABLE {PreferenceLoader.db_status_table};')
 
     with alive_bar(total=1,title='Scraping metadata') as progress_bar:
         legacy_data_years = []
@@ -144,7 +144,7 @@ def main(legacy_start_year: Optional[str], legacy_end_year: Optional[str]) -> No
                 progress_bar.text = f'  -> Processing: {pdf[0]} {sem[int(pdf[1])-1]} {pdf[2]}'
                 process_pdf(pdf, legacy_data_years)
                 progress_bar() # pylint: disable=not-callable
-                DatabaseHandler.set_sync_percentage(round(progress_bar.current()/num_pdfs*100))
+                DatabaseHandler.set_build_percentage(round(progress_bar.current()/num_pdfs*100))
         except KeyboardInterrupt:
             Logger.log('KeyboardInterrupt recieved: Exiting', importance=None)
             Utils.shutdown()

@@ -63,10 +63,10 @@ class DatabaseHandler:
         return results
 
     @staticmethod
-    def set_sync_percentage(sync_percentage: int):
-        """Set the sync percentage for the database.
+    def set_build_percentage(build_percentage: int):
+        """Set the build percentage for the database.
         Parameters:
-            sync_percentage (int): Integer representing the sync percentage
+            build_percentage (int): Integer representing the build percentage
         Returns:
             tuple: Will return tuple of tuples containing the result if no error was encountered
             str: Will return a string if an error was encountered
@@ -77,9 +77,8 @@ class DatabaseHandler:
                                        password=PreferenceLoader.db_pass, database=PreferenceLoader.db_name, autocommit=True)
             cursor = database.cursor()
             # Logger.log(f'>>> Executing DB Query: {message}', Importance.DBUG)
-            cursor.execute('TRUNCATE TABLE status;')
-            cursor.execute(f'INSERT INTO status (item,value) values ("SYNCING",{sync_percentage != 100});')
-            cursor.execute(f'INSERT INTO status (item,value) values ("SYNC_PERC",{sync_percentage});')
+            cursor.execute(f'TRUNCATE TABLE {PreferenceLoader.db_status_table};')
+            cursor.execute(f'INSERT INTO {PreferenceLoader.db_status_table} (item,value) values ("BUILD_PERC",{build_percentage});')
             results = cursor.fetchall()
             database.close()
         except Exception as ex:
