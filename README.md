@@ -1,4 +1,4 @@
-# TAMU-GradeDistribution-ParserV2
+# tamugd-parser
 
 This project is dedicated to helping analyze the massive amounts of data released every semester by Texas A&M University's Registrar's office.
 
@@ -13,7 +13,7 @@ This project is dedicated to helping analyze the massive amounts of data release
 - [x] <s>Grade report parsing</s>
 - [x] <s>Automatically add data to a mySQL database backend</s>
 - [x] <s>Full rewrite with multithreading</s>
-- [ ] Fully automated grade report updates (auto add new reports)
+- [x] <s>Fully automated grade report updates (auto add new reports)</s>
 
 
 ## How to set up:
