@@ -31,8 +31,8 @@ class PreferenceLoader:
             'database_name': 'database_name_here',
             'database_username': 'database_username_here',
             'database_password': 'database_password_here',
-            'gradesTable': 'grades_table_name_here',
-            'statusTable': 'status_table_name_here',
+            'db_grades_table': 'grades_table_name_here',
+            'db_status_table': 'status_table_name_here',
             'logger_enabled': True
         }
 
@@ -74,9 +74,11 @@ class PreferenceLoader:
 
                 PreferenceLoader.db_address = prefs['database_host']
                 PreferenceLoader.db_port = prefs['database_port']
+                PreferenceLoader.db_name = prefs['database_name']
                 PreferenceLoader.db_user = prefs['database_username']
                 PreferenceLoader.db_pass = prefs['database_password']
-                PreferenceLoader.db_name = prefs['database_name']
+                PreferenceLoader.db_grades_table = prefs['db_grades_table']
+                PreferenceLoader.db_status_table = prefs['db_status_table']
                 PreferenceLoader.logger_enabled = prefs['logger_enabled']
                 return True
 
