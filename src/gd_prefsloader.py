@@ -15,6 +15,8 @@ class PreferenceLoader:
     db_user = 'database_username_here'
     db_pass = 'database_password_here'
     db_name = 'database_name_here'
+    db_grades_table = 'grades_table_name_here'
+    db_status_table = 'status_table_name_here'
 
     logger_enabled = True
     preferences_location = '../'
@@ -26,9 +28,11 @@ class PreferenceLoader:
         filecontents = {
             'database_host': 'localhost',
             'database_port': 3306,
+            'database_name': 'database_name_here',
             'database_username': 'database_username_here',
             'database_password': 'database_password_here',
-            'database_name': 'database_name_here',
+            'gradesTable': 'grades_table_name_here',
+            'statusTable': 'status_table_name_here',
             'logger_enabled': True
         }
 

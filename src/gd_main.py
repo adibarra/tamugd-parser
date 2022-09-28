@@ -14,6 +14,7 @@ from gd_utils import Utils
 from gd_logger import Logger, Importance
 from gd_database import DatabaseHandler
 from gd_pdfparser import PDFParser
+from gd_prefsloader import PreferenceLoader
 
 
 OVERWRITE_ALL_PDF = False
@@ -71,7 +72,7 @@ def process_pdf(pdf_data: Tuple, legacy_data_years: list[int]) -> None:
         pdflink = PDF_BASE_LINK.format(year+semester, college)
         pdf_file_path = load_pdf(pdflink, no_dl=(year in legacy_data_years))
         grades_list = PDFParser.parse_grades_pdf(pdf_file_path)
-        DatabaseHandler.add_grade_entries('tamugrades', grades_list)
+        DatabaseHandler.add_grade_entries('grades', grades_list)
     except Exception:
         pdf_name = pdf_file_path.split('/')[-1]
         Logger.log(f'Unable to parse PDF({pdf_name})', Importance.WARN)
@@ -82,7 +83,7 @@ def main(legacy_start_year: Optional[str], legacy_end_year: Optional[str]) -> No
     # complete startup tasks
     Utils.startup()
     print('Check the latest log file to see database build progress')
-    DatabaseHandler.send_query('CREATE TABLE IF NOT EXISTS tamugrades ('
+    DatabaseHandler.send_query('CREATE TABLE IF NOT EXISTS '+PreferenceLoader.db_grades_table+' ('
         +'year SMALLINT(4),'
         +'semester VARCHAR(6),'
         +'college VARCHAR(7),'
@@ -103,12 +104,12 @@ def main(legacy_start_year: Optional[str], legacy_end_year: Optional[str]) -> No
         +'numQ SMALLINT(3),'
         +'numX SMALLINT(3)'
         +');')
-    DatabaseHandler.send_query('CREATE TABLE IF NOT EXISTS status ('
+    DatabaseHandler.send_query('CREATE TABLE IF NOT EXISTS '+PreferenceLoader.db_status_table+' ('
         +'item VARCHAR(10),'
         +'value SMALLINT(3)'
         +');')
-    DatabaseHandler.send_query('TRUNCATE TABLE tamugrades;')
-    DatabaseHandler.send_query('TRUNCATE TABLE status;')
+    DatabaseHandler.send_query('TRUNCATE TABLE '+PreferenceLoader.db_grades_table+';')
+    DatabaseHandler.send_query('TRUNCATE TABLE '+PreferenceLoader.db_status_table+';')
 
     with alive_bar(total=1,title='Scraping metadata') as progress_bar:
         legacy_data_years = []
