@@ -116,7 +116,7 @@ def main(legacy_start_year: Optional[str], legacy_end_year: Optional[str]) -> No
         years, colleges = scrape_report_metadata()
         if legacy_start_year is not None:
             legacy_data_years = Utils.interpolate_num_list([int(legacy_start_year), int(legacy_end_year or years[-1])], 1)
-        years = years+legacy_data_years
+        years = years+legacy_data_years[::-1]
         blacklist = ['AE','AP','GV','QT','UT','DN_PROF','SL_PROF','MD_PROF','CP_PROF','VM_PROF']
         colleges = list(set(colleges) - set(blacklist))
         # AE=Academic Success Center
