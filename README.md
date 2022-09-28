@@ -24,9 +24,9 @@ This project is dedicated to helping analyze the massive amounts of data release
     ```
 2. Create mySQL database and user:
     ```sql
-    mysql> CREATE DATABASE tamugradesDB;
+    mysql> CREATE DATABASE database_name_here;
     mysql> CREATE USER 'database_user_name_here'@'localhost' IDENTIFIED BY 'database_user_password_here';
-    mysql> GRANT ALL PRIVILEGES ON tamugradesDB.* TO 'database_user_name_here'@'localhost';
+    mysql> GRANT ALL PRIVILEGES ON database_name_here.* TO 'database_user_name_here'@'localhost';
     mysql> FLUSH PRIVILEGES;
     mysql> exit;
     ```
