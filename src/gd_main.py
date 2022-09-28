@@ -105,9 +105,10 @@ def main() -> None:
         +');')
     DatabaseHandler.send_query('CREATE TABLE IF NOT EXISTS status ('
         +'item VARCHAR(10),'
-        +'value BOOLEAN'
+        +'value SMALLINT(3)'
         +');')
     DatabaseHandler.send_query('TRUNCATE TABLE tamugrades;')
+    DatabaseHandler.send_query('TRUNCATE TABLE status;')
 
     with alive_bar(total=1,title='Scraping metadata') as progress_bar:
         semesters = ['1','2','3']
