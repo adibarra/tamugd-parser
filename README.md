@@ -52,14 +52,16 @@ A legacy PDF is a PDF which you have already downloaded. This is useful if you w
 ### If you DO NOT have legacy pdfs
 1. Run main python script:
     ```bash
-    # NOTE: building the database will take a while (detatch screen with CTRL+A then CTRL+D after running main script)
+    # NOTE: Building the database will take a while...
+    #       Detach screen with CTRL+A then CTRL+D after running main script.
     $ python3 src/gd_main.py
     ```
 
 ### If you DO have legacy pdfs
 1. Run main python script:
     ```bash
-    # NOTE: building the database will take a while (detatch screen with CTRL+A then CTRL+D after running main script)
+    # NOTE: Building the database will take a while...
+    #       Detach screen with CTRL+A then CTRL+D after running main script.
 
     # display help menu
     $ python3 src/gd_main.py --help
@@ -67,6 +69,7 @@ A legacy PDF is a PDF which you have already downloaded. This is useful if you w
     $ python3 src/gd_main.py --start-year-legacy 2014
     ```
 
+---
 
 Once the script is running you can monitor its progress by using the following command:
 ```bash
