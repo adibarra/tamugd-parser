@@ -113,11 +113,12 @@ def main(legacy_start_year: Optional[str], legacy_end_year: Optional[str]) -> No
 
     with alive_bar(total=1,title='Scraping metadata') as progress_bar:
         legacy_data_years = []
-        semesters = ['1','2','3']
+        semesters = ['3','2','1']
         years, colleges = scrape_report_metadata()
         if legacy_start_year is not None:
             legacy_data_years = Utils.interpolate_num_list([int(legacy_start_year), int(legacy_end_year or years[-1])], 1)
         years = years+legacy_data_years[::-1]
+        print('Processing data for: ', years)
         blacklist = ['AE','AP','GV','QT','UT','DN_PROF','SL_PROF','MD_PROF','CP_PROF','VM_PROF']
         colleges = list(set(colleges) - set(blacklist))
         # AE=Academic Success Center
@@ -164,7 +165,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # ignore end year if start year is not given
-    if not any(check in ['-s','--start-year-legacy'] for check in sys.argv):
+    if any(check in ['-e','--end-year-legacy'] for check in sys.argv) and not any(check in ['-s','--start-year-legacy'] for check in sys.argv):
         print('Ignoring end year legacy argument because start year legacy argument was not given.')
         args.eyl = None
 
