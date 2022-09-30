@@ -41,7 +41,7 @@ This project is dedicated to helping analyze the massive amounts of data release
 4. Generate prefs.json and update file:
     ```bash
     # run in TAMU-GradeDistribution-ParserV2
-    $ python3 src/gd_main.py
+    $ python3 src/main.py
     $ nano prefs.json
     ```
 
@@ -54,7 +54,7 @@ A legacy PDF is a PDF which you have already downloaded. This is useful if you w
     ```bash
     # NOTE: Building the database will take a while...
     #       Detach screen with CTRL+A then CTRL+D after running main script.
-    $ python3 src/gd_main.py
+    $ python3 src/main.py
     ```
 
 ### If you DO have legacy pdfs
@@ -64,9 +64,9 @@ A legacy PDF is a PDF which you have already downloaded. This is useful if you w
     #       Detach screen with CTRL+A then CTRL+D after running main script.
 
     # display help menu
-    $ python3 src/gd_main.py --help
+    $ python3 src/main.py --help
     # try adding legacy pdfs from 2014 to most recent downloadable pdf
-    $ python3 src/gd_main.py --start-year-legacy 2014
+    $ python3 src/main.py --start-year-legacy 2014
     ```
 
 ---
