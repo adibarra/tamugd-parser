@@ -7,7 +7,6 @@ import os
 import sys
 import argparse
 from typing import Optional, Tuple
-import itertools
 import requests
 
 import bs4
@@ -125,11 +124,13 @@ def main(start_year: Optional[str], end_year: Optional[str]) -> None:
         # automatically load pdfs from pdfs list
         try:
             sem = ['SPRING','SUMMER','FALL']
-            for year, semester, college in list(itertools.product(years,semesters,colleges)):
-                progress_bar.text = f'  -> Processing: {year} {sem[int(semester)-1]} {college}'
-                process_pdf(str(year), semester, college)
-                progress_bar() # pylint: disable=not-callable
-                DatabaseHandler.set_build_percentage(round(progress_bar.current()/num_pdfs*100))
+            for year in years:
+                for semester in semesters:
+                    for college in colleges:
+                        progress_bar.text = f'  -> Processing: {year} {sem[int(semester)-1]} {college}'
+                        process_pdf(str(year), semester, college)
+                        progress_bar() # pylint: disable=not-callable
+                        DatabaseHandler.set_build_percentage(round(progress_bar.current()/num_pdfs*100))
         except KeyboardInterrupt:
             Logger.log('KeyboardInterrupt recieved: Exiting', importance=None)
             Utils.shutdown()
