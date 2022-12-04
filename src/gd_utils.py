@@ -1,4 +1,4 @@
-# TAMU-GradeDistribution-ParserV2: gd_utils.py
+# tamugd-parser: gd_utils.py
 # @authors: github/adibarra
 
 
@@ -25,6 +25,7 @@ class Utils:
             if DatabaseHandler.check_db_connection():
                 Logger.log('Database connection established!', importance=None)
                 Logger.log('-----------------------\n', importance=None)
+                print('Check the latest log file to see database build progress')
                 DatabaseHandler.set_build_percentage(0)
             else:
                 Logger.log('>>> Unable to establish database connection <<<', Importance.CRIT)

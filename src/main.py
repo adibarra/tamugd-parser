@@ -1,13 +1,15 @@
-# TAMU-GradeDistribution-ParserV2: gd_main.py
+# tamugd-parser: main.py
 # @authors: github/adibarra
 
 
 # imports
 import os
 import sys
-from typing import Optional, Tuple
 import argparse
+from typing import Optional, Tuple
+import itertools
 import requests
+
 import bs4
 from alive_progress import alive_bar
 from gd_utils import Utils
@@ -17,73 +19,55 @@ from gd_pdfparser import PDFParser
 from gd_prefsloader import PreferenceLoader
 
 
-OVERWRITE_ALL_PDF = False
-LEGACY_DATA_YEARS = []
 PDF_ROOT_LINK = 'https://web-as.tamu.edu/GradeReports/'
 PDF_BASE_LINK = 'https://web-as.tamu.edu/GradeReports/PDFReports/{0}/grd{0}{1}.pdf'
 PDF_SAVE_DIR  = 'pdfs/'
 
 
 # scrape years and colleges from grade reports site using bs4
-def scrape_report_metadata() -> Tuple[list[str],list[str]]:
-    response = requests.get(PDF_ROOT_LINK)
-    soup = bs4.BeautifulSoup(response.text, 'html.parser')
+def scrape_report_metadata() -> Tuple[list[int],list[str]]:
+    soup = bs4.BeautifulSoup(requests.get(PDF_ROOT_LINK,timeout=1000).text, 'html.parser')
     years, colleges = [], []
     for option in soup.select("#ctl00_plcMain_lstGradYear > option"):
-        years.append(option['value'])
+        years.append(int(option['value']))
     for option in soup.select("#ctl00_plcMain_lstGradCollege > option"):
         colleges.append(option['value'])
     return years, colleges
 
 
-# load pdf or download from given url if not present
-def load_pdf(download_url: str, no_dl=False) -> str:
+# load pdf or attempt to download if not present
+def load_pdf(year: str, semester: str, college: str) -> str:
+    download_url = PDF_BASE_LINK.format(year+semester, college)
     file_name = download_url.split('/')[-1]
     file_path = PDF_SAVE_DIR+file_name
 
-    def download_pdf():
-        Logger.log(f'Downloading PDF({file_name}).', Importance.INFO)
-        response = requests.get(download_url)
-        with open(file_path,'wb+') as file:
-            file.write(response.content)
-        Logger.log(f'Finished downloading and saving PDF({file_name}).', Importance.INFO)
-
-    if no_dl:
-        Logger.log(f'[NO DOWNLOAD] PDF({file_name}) download forcibly skipped.', Importance.INFO)
-        return file_path
-
     if os.path.exists(file_path):
-        if OVERWRITE_ALL_PDF:
-            Logger.log(f'PDF({file_name}) already exists. Overwriting.', Importance.INFO)
-            download_pdf()
-        else:
-            Logger.log(f'PDF({file_name}) already exists. Skipping download.', Importance.INFO)
+        Logger.log(f'PDF({file_name}) already exists. Skipping download.', Importance.INFO)
     else:
         os.makedirs(''.join(file_path.split('/')[:-1]), exist_ok=True)
         Logger.log(f'PDF({file_name}) does not exist. Downloading.', Importance.INFO)
-        download_pdf()
+        with open(file_path,'wb+') as file:
+            file.write(requests.get(download_url,timeout=1000).content)
+        Logger.log(f'Finished downloading and saving PDF({file_name}).', Importance.INFO)
     return file_path
 
 
-# process given PDFdata
-def process_pdf(pdf_data: Tuple, legacy_data_years: list[int]) -> None:
+# process given pdf data
+def process_pdf(year: str, semester: str, college: str) -> None:
     try:
-        year, semester, college = pdf_data
-        pdflink = PDF_BASE_LINK.format(year+semester, college)
-        pdf_file_path = load_pdf(pdflink, no_dl=(year in legacy_data_years))
-        grades_list = PDFParser.parse_grades_pdf(pdf_file_path)
-        DatabaseHandler.add_grade_entries('grades', grades_list)
+        pdf_file_path = load_pdf(year, semester, college)
+        DatabaseHandler.add_grade_entries('grades', PDFParser.parse_grades_pdf(pdf_file_path))
     except Exception:
         pdf_name = pdf_file_path.split('/')[-1]
         Logger.log(f'Unable to parse PDF({pdf_name})', Importance.WARN)
 
 
 # main
-def main(legacy_start_year: Optional[str], legacy_end_year: Optional[str]) -> None:
-    # complete startup tasks
+def main(start_year: Optional[str], end_year: Optional[str]) -> None:
     Utils.startup()
-    print('Check the latest log file to see database build progress')
-    DatabaseHandler.send_query(f'CREATE TABLE IF NOT EXISTS {PreferenceLoader.db_grades_table} ('
+    # set up database
+    DatabaseHandler.send_query(
+        f'CREATE TABLE IF NOT EXISTS {PreferenceLoader.db_grades_table} ('
         +'year SMALLINT(4),'
         +'semester VARCHAR(6),'
         +'college VARCHAR(7),'
@@ -104,20 +88,27 @@ def main(legacy_start_year: Optional[str], legacy_end_year: Optional[str]) -> No
         +'numQ SMALLINT(3),'
         +'numX SMALLINT(3)'
         +');')
-    DatabaseHandler.send_query(f'CREATE TABLE IF NOT EXISTS {PreferenceLoader.db_status_table} ('
+    DatabaseHandler.send_query(
+        f'CREATE TABLE IF NOT EXISTS {PreferenceLoader.db_status_table} ('
         +'item VARCHAR(10),'
         +'value SMALLINT(3)'
         +');')
     DatabaseHandler.send_query(f'TRUNCATE TABLE {PreferenceLoader.db_grades_table};')
     DatabaseHandler.send_query(f'TRUNCATE TABLE {PreferenceLoader.db_status_table};')
 
+    # prepare to process data
     with alive_bar(total=1,title='Scraping metadata') as progress_bar:
-        legacy_data_years = []
         semesters = ['3','2','1']
         years, colleges = scrape_report_metadata()
-        if legacy_start_year is not None:
-            legacy_data_years = Utils.interpolate_num_list([int(legacy_start_year), int(legacy_end_year or years[-1])], 1)
-        years = years+legacy_data_years[::-1]
+
+        # process cmd year args
+        if start_year is not None:
+            years += Utils.interpolate_num_list([int(start_year), int(years[-1]-1)], 1)
+        years.sort()
+        start_year = years[0] if start_year is None else int(start_year)
+        end_year = years[-1] if end_year is None else int(end_year)
+        years = years[years.index(start_year):years.index(end_year)+1]
+
         print('Processing data for: ', years)
         blacklist = ['AE','AP','GV','QT','UT','DN_PROF','SL_PROF','MD_PROF','CP_PROF','VM_PROF']
         colleges = list(set(colleges) - set(blacklist))
@@ -131,19 +122,12 @@ def main(legacy_start_year: Optional[str], legacy_end_year: Optional[str]) -> No
 
     num_pdfs = len(years)*len(semesters)*len(colleges)
     with alive_bar(total=num_pdfs,dual_line=True,title='Building database') as progress_bar:
-        # generate pdf urls
-        pdf_data = []
-        for year in years[::-1]:
-            for semester in semesters:
-                for college in colleges:
-                    pdf_data.append([str(year),semester,college])
-
         # automatically load pdfs from pdfs list
         try:
             sem = ['SPRING','SUMMER','FALL']
-            for pdf in pdf_data:
-                progress_bar.text = f'  -> Processing: {pdf[0]} {sem[int(pdf[1])-1]} {pdf[2]}'
-                process_pdf(pdf, legacy_data_years)
+            for year, semester, college in list(itertools.product(years,semesters,colleges)):
+                progress_bar.text = f'  -> Processing: {year} {sem[int(semester)-1]} {college}'
+                process_pdf(str(year), semester, college)
                 progress_bar() # pylint: disable=not-callable
                 DatabaseHandler.set_build_percentage(round(progress_bar.current()/num_pdfs*100))
         except KeyboardInterrupt:
@@ -156,17 +140,12 @@ def main(legacy_start_year: Optional[str], legacy_end_year: Optional[str]) -> No
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Scrape and parse TAMU Registrar\'s grade report PDFs and load them into a SQL database.')
-    parser.add_argument('-s', '--start-year-legacy', type=int, default=None, dest='syl',
-        help='the integer year of your first legacy pdf.')
-    parser.add_argument('-e', '--end-year-legacy', type=int, default=None, dest='eyl',
-        help='the integer year of your last legacy pdf. '
-        +'If start year is given, but end year is not, end year will be set to the most one less than the year of the oldest pdf on the registrar\'s website. '
-        +'If start year is not given, this argument will be ignored.')
+    parser.add_argument('-s', '--start-year', type=int, default=None, dest='sy',
+        help='the integer year of your first pdf. '
+        +'The default value is the year of the oldest pdf from the registrar\'s website.')
+    parser.add_argument('-e', '--end-year', type=int, default=None, dest='ey',
+        help='the integer year of your last pdf. '
+        +'The default value is the year of the latest pdf from the registrar\'s website.')
     args = parser.parse_args()
 
-    # ignore end year if start year is not given
-    if any(check in ['-e','--end-year-legacy'] for check in sys.argv) and not any(check in ['-s','--start-year-legacy'] for check in sys.argv):
-        print('Ignoring end year legacy argument because start year legacy argument was not given.')
-        args.eyl = None
-
-    main(args.syl,  args.eyl)
+    main(args.sy, args.ey)
