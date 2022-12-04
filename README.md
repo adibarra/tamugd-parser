@@ -40,39 +40,36 @@ This project is dedicated to helping analyze the massive amounts of data release
     ```
 4. Generate prefs.json and update file:
     ```bash
-    # run in TAMU-GradeDistribution-ParserV2
+    # run in tamugd-parser/
     $ python3 src/main.py
     $ nano prefs.json
     ```
 
-## Legacy PDFs:
-A legacy PDF is a PDF which you have already downloaded. This is useful if you want to add data from a PDF which is not currently available on the Registrar's website.
 
-## How to run:
-### If you DO NOT have legacy pdfs
-1. Run main python script:
-    ```bash
-    # NOTE: Building the database will take a while...
-    #       Detach screen with CTRL+A then CTRL+D after running main script.
-    $ python3 src/main.py
-    ```
+## Notes
+By default, this tool only processes PDFs that are CURRENTLY available from the Registrar but it supports parsing PDFs from 2012 onwards (perhaps also older ones, but they have not been tested). It will automatically download PDFs as needed. If you have additional PDFs you can supply your own in the `pdfs/` folder however you must use the `-s or --start-year` flag.
 
-### If you DO have legacy pdfs
-1. Run main python script:
-    ```bash
-    # NOTE: Building the database will take a while...
-    #       Detach screen with CTRL+A then CTRL+D after running main script.
+Run `python3 src/main.py --help` for more detailed information.
 
-    # display help menu
-    $ python3 src/main.py --help
-    # try adding legacy pdfs from 2014 to most recent downloadable pdf
-    $ python3 src/main.py --start-year-legacy 2014
-    ```
+
+## Examples
+```bash
+# Process all PDFs from the Registrar
+$ python3 src/main.py
+
+# Process PDFs from 2014 to present
+$ python3 src/main.py --start-year 2014
+
+# Process PDFs from 2014 to 2018
+$ python3 src/main.py --start-year 2014 --end-year 2018
+```
 
 ---
 
 Once the script is running you can monitor its progress by using the following command:
 ```bash
-# automatically get and display a live feed from the newest logfile
+# Building the database will take a while...
+# Detach screen with CTRL+A then CTRL+D while running the main script
+# Then run this to display a live feed from the newest logfile
 $ cd logs && tail -f $(ls -t | head -1)
 ```
