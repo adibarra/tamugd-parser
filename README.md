@@ -34,8 +34,8 @@ This project is dedicated to helping analyze the massive amounts of data release
     ```bash
     # automatically install python dependencies
     $ screen -SRD tamugd-parser
-    $ python3 -m venv tamugd-parser-venv
-    $ source tamugd-parser-venv/bin/activate
+    $ python3 -m venv venv
+    $ source venv/bin/activate
     $ pip install -r requirements.txt
     ```
 4. Generate prefs.json and update file:

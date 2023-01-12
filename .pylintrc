@@ -1,0 +1,9 @@
+[FORMAT]
+
+max-line-length=240
+
+[MESSAGES CONTROL]
+
+disable=
+    broad-except
+    unspecified-encoding

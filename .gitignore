@@ -1,6 +1,6 @@
-__pycache__
-.vscode
-tamugd-parser-venv
+__pycache__/
+.vscode/
+venv/
 *.json
 *.log
 *.pdf
