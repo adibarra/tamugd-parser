@@ -1,24 +1,28 @@
+---
 name: Pylint
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
-  build:
-
+  pylint:
+    name: 🔧 Clean up with pylint
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v2
+    - name: Check out code from GitHub
+      uses: actions/checkout@v3
     - name: Set up Python 3.9
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: 3.9
+        cache: 'pip'
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        pip install pylint
-        pip install pylint-exit
+        pip install pylint pylint-exit
     - name: Analyzing the code with pylint
       run: |
-        pylint $(find . -name "*.py" | xargs) --max-line-length=240 --disable="broad-except,unspecified-encoding" || pylint-exit $?
+        pylint $(git ls-files '*.py') || pylint-exit $?
