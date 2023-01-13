@@ -22,10 +22,13 @@ class PreferenceLoader:
     preferences_location = '../'
     preference_file = 'prefs.json'
 
+
     @staticmethod
     def generate_prefs_file():
+        """ Method to generate a preferences file with default settings """
+
         generated = False
-        filecontents = {
+        file_contents = {
             'database_host': 'localhost',
             'database_port': 3306,
             'database_name': 'database_name_here',
@@ -52,7 +55,7 @@ class PreferenceLoader:
             try:
                 # create preferences file with default settings
                 with open(file_name,'w') as json_file:
-                    json.dump(filecontents, json_file, indent=4)
+                    json.dump(file_contents, json_file, indent=4)
                     generated = True
             except Exception as ex:
                 print(f'There was an error while trying to create the {PreferenceLoader.preference_file} file:')
@@ -60,8 +63,11 @@ class PreferenceLoader:
 
         return generated
 
+
     @staticmethod
     def load_prefs():
+        """ Method to load preferences from file """
+
         if PreferenceLoader.generate_prefs_file():
             print(f'Generated preferences file ({PreferenceLoader.preferences_location}{PreferenceLoader.preference_file})')
             print('Fill it out then restart the script when you are ready.')
