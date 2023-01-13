@@ -1,4 +1,4 @@
-PyPDF2==1.27.9
+PyPDF2==3.0.1
 PyMySQL==1.0.2
 requests==2.27.1
 alive-progress==2.4.1
