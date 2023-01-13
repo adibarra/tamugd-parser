@@ -12,6 +12,7 @@ from gd_prefsloader import PreferenceLoader
 class DatabaseHandler:
     """ This is a class to handle database queries """
 
+
     @staticmethod
     def check_db_connection():
         """Checks connection to database.
@@ -20,6 +21,7 @@ class DatabaseHandler:
         """
 
         return DatabaseHandler.check_db_connection_error() == 'No Error'
+
 
     @staticmethod
     def check_db_connection_error():
@@ -38,6 +40,7 @@ class DatabaseHandler:
         except Exception as ex:
             return f'{ex.args[0]}: {ex.args[1]}'
         return 'No Error'
+
 
     @staticmethod
     def send_query(message: str):
@@ -61,6 +64,7 @@ class DatabaseHandler:
             Logger.log(f'>>> Error Executing DB Query: ERROR {ex}', Importance.CRIT)
             return f'ERROR {ex}'
         return results
+
 
     @staticmethod
     def set_build_percentage(build_percentage: int):
@@ -86,9 +90,10 @@ class DatabaseHandler:
             return f'ERROR {ex}'
         return results
 
+
     @staticmethod
     def add_grade_entries(table_name: str, entry_list: list):
-        """Adds a list or single grade report entery to the database
+        """Adds a list or single grade report entry to the database
         Parameters:
             table_name (str): Name of the table to check for
             entry_list (list): List to add to DB as a record

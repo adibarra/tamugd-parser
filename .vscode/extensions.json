@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "editorconfig.editorconfig",
+    "ms-python.isort",
+    "ms-python.pylint",
+    "streetsidesoftware.code-spell-checker",
+  ]
+}

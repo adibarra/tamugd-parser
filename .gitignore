@@ -1,6 +1,6 @@
 __pycache__/
 venv/
-*.json
+prefs.json
 *.log
 *.pdf
 *.zip

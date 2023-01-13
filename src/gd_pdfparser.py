@@ -13,9 +13,16 @@ from gd_logger import Logger, Importance
 class PDFParser:
     """ Class to parse PDF files """
 
-    # parse grade report pdf
+
     @staticmethod
     def parse_grades_pdf(pdf_file_path: str) -> List:
+        """Parse a grade report PDF file.
+        Parameters:
+            pdf_file_path (str): The path to the PDF file
+        Returns:
+            list: A list of lists containing the parsed data
+        """
+
         Logger.log(f'Started parsing full PDF({pdf_file_path.split("/")[-1]})', Importance.INFO)
         try:
             with open(pdf_file_path,'rb') as pdf_file:

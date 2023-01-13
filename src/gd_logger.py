@@ -15,6 +15,7 @@ from gd_prefsloader import PreferenceLoader
 
 class Importance(enum.IntEnum):
     """ Enum to keep track of logger message importance """
+
     CRIT = 0
     WARN = 1
     INFO = 2
@@ -23,11 +24,18 @@ class Importance(enum.IntEnum):
 
 class Logger:
     """ Class to handle logging """
+
     MAX_LOGFILE_SIZE = 1e+6  # 1 MB
 
-    # log message to logfile
+
     @staticmethod
     def log(message: str, importance: Importance):
+        """Log a message to the logfile.
+        Parameters:
+            message (str): The message to log
+            importance (Importance): The importance of the message
+        """
+
         if not PreferenceLoader.logger_enabled:
             return
         # if logs folder does not exist then create it
@@ -58,7 +66,7 @@ class Logger:
                 else:
                     log_file.write(f'{time.strftime("%Y-%m-%d %H:%M:%S")} [{importance.name}] {message}\n')
 
-            # if logfile goes over MAX_LOGFILE_SIZE, rename current logfile and later autocreate another
+            # if logfile goes over MAX_LOGFILE_SIZE, rename current logfile and later auto create another
             if os.stat(file_path).st_size > Logger.MAX_LOGFILE_SIZE:
                 log_number = 0
                 # iterate through logs for the day and find largest logfile number
