@@ -23,8 +23,12 @@ PDF_BASE_LINK = 'https://web-as.tamu.edu/GradeReports/PDFReports/{0}/grd{0}{1}.p
 PDF_SAVE_DIR  = 'pdfs/'
 
 
-# scrape years and colleges from grade reports site using bs4
 def scrape_report_metadata() -> Tuple[list[int],list[str]]:
+    """Scrape years and colleges from grade reports site using bs4.
+    Returns:
+        tuple: containing list of years and list of colleges
+    """
+
     soup = bs4.BeautifulSoup(requests.get(PDF_ROOT_LINK,timeout=1000).text, 'html.parser')
     years, colleges = [], []
     for option in soup.select("#ctl00_plcMain_lstGradYear > option"):
@@ -34,8 +38,16 @@ def scrape_report_metadata() -> Tuple[list[int],list[str]]:
     return years, colleges
 
 
-# load pdf or attempt to download if not present
 def load_pdf(year: str, semester: str, college: str) -> str:
+    """Load pdf from disk or attempt to download if not present.
+    Parameters:
+        year (str): The year of the report
+        semester (str): The semester of the report
+        college (str): The college of the report
+    Returns:
+        str: The path to the pdf
+    """
+
     download_url = PDF_BASE_LINK.format(year+semester, college)
     file_name = download_url.split('/')[-1]
     file_path = PDF_SAVE_DIR+file_name
@@ -51,8 +63,14 @@ def load_pdf(year: str, semester: str, college: str) -> str:
     return file_path
 
 
-# process given pdf data
 def process_pdf(year: str, semester: str, college: str) -> None:
+    """Process given pdf data. Parses and adds pdf content to the database.
+    Parameters:
+        year (str): The year of the report
+        semester (str): The semester of the report
+        college (str): The college of the report
+    """
+
     try:
         pdf_file_path = load_pdf(year, semester, college)
         DatabaseHandler.add_grade_entries('grades', PDFParser.parse_grades_pdf(pdf_file_path))
@@ -61,8 +79,13 @@ def process_pdf(year: str, semester: str, college: str) -> None:
         Logger.log(f'Unable to parse PDF({pdf_name})', Importance.WARN)
 
 
-# main
 def main(start_year: Optional[str], end_year: Optional[str]) -> None:
+    """Main function. Parses command line arguments and starts the program.
+    Parameters:
+        start_year (Optional[str]): The year to start scraping from
+        end_year (Optional[str]): The year to end scraping at
+    """
+
     Utils.startup()
     # set up database
     DatabaseHandler.send_query(
@@ -132,7 +155,7 @@ def main(start_year: Optional[str], end_year: Optional[str]) -> None:
                         progress_bar() # pylint: disable=not-callable
                         DatabaseHandler.set_build_percentage(round(progress_bar.current()/num_pdfs*100))
         except KeyboardInterrupt:
-            Logger.log('KeyboardInterrupt recieved: Exiting', importance=None)
+            Logger.log('KeyboardInterrupt received: Exiting', importance=None)
             Utils.shutdown()
             sys.exit(1)
         else:
