@@ -40,7 +40,7 @@
   description: "This issue or PR is inactive."
 - name: "status/superseded"
   color: cfd3d7
-  description: "This issue or PR is has been superseded."
+  description: "This issue or PR has been superseded."
 - name: "status/triage"
   color: 00ff00
   description: "This issue or PR needs to be triaged."
