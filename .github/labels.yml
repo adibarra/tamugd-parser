@@ -38,7 +38,7 @@
 - name: "status/stale"
   color: fef2c0
   description: "This issue or PR is inactive."
-  - name: "status/superseded"
+- name: "status/superseded"
   color: cfd3d7
   description: "This issue or PR is has been superseded."
 - name: "status/triage"
