@@ -1,20 +1,16 @@
-# Add the 'status/triage' label for all new PRs
-status/triage:
-- '*'
-
-# Add 'type/ci-workflow-env' label for changes to .github folder or other supporting files
+# Add 'type/ci-workflow-env' label for changes to tooling, config, or env files
 type/ci-workflow-env:
-- '.github/**/*'
-- '.vscode/**/*'
-- '.editorconfig'
-- '.pylintrc'
-- '.gitignore'
-- '.gitattributes'
+  - '.github/**/*'
+  - '.vscode/**/*'
+  - .editorconfig
+  - .gitignore
+  - .gitattributes
+  - .pylintrc
 
 # Add 'type/dependencies' label for changes to requirements.txt
 type/dependencies:
-- '**/requirements.txt'
+  - '**/requirements.txt'
 
-# Add 'docs' label for changes to *.md files not in the .github folder
-type/docs:
-- any: ['LICENSE', '**/*.md', '!.github/**/*']
+# Add 'documentation' label for changes to *.md files not in the .github folder
+type/documentation:
+  - any: ['LICENSE', '**/*.md', '!.github/**/*']
