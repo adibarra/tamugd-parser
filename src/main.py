@@ -153,7 +153,7 @@ def main(start_year: Optional[str], end_year: Optional[str]) -> None:
                         progress_bar.text = f'  -> Processing: {year} {sem[int(semester)-1]} {college}'
                         process_pdf(str(year), semester, college)
                         progress_bar() # pylint: disable=not-callable
-                        DatabaseHandler.set_build_percentage(round(progress_bar.current()/num_pdfs*100))
+                        DatabaseHandler.set_build_percentage(round(progress_bar.current/num_pdfs*100))
         except KeyboardInterrupt:
             Logger.log('KeyboardInterrupt received: Exiting', importance=None)
             Utils.shutdown()
