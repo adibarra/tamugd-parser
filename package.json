@@ -1,0 +1,30 @@
+{
+  "name": "tamugd-parser",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "pnpm@8.6.0",
+  "description": "A parser for ingesting TAMU Registrar's Grade Distribution PDFs into a database.",
+  "author": "adibarra <github@adibarra.com> (https://adibarra.com)",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rm -rf ./dist/ && tsc",
+    "start": "pnpm build && node dist/index.js",
+    "taze": "taze major -I"
+  },
+  "dependencies": {
+    "cheerio": "1.0.0-rc.12",
+    "minimist": "^1.2.8",
+    "mysql": "^2.18.1",
+    "pdf-parse": "^1.1.1"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config-ts": "^0.39.4",
+    "@types/minimist": "^1.2.2",
+    "@types/node": "^20.2.5",
+    "pnpm": "^8.6.0",
+    "taze": "^0.10.1",
+    "typescript": "^5.1.3"
+  }
+}

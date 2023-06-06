@@ -1,0 +1,7 @@
+{
+  "extends": "@antfu/eslint-config-ts",
+  "rules": {
+    "no-console": "off",
+    "antfu/if-newline": "off"
+  }
+}

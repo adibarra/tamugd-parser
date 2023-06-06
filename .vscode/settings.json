@@ -1,19 +1,18 @@
 {
-    "cSpell.words": [
-        "DBUG",
-        "logfile",
-        "pdfparser",
-        "pdfs",
-        "PERC",
-        "prefs",
-        "prefsloader",
-        "pylint",
-        "pymysql",
-        "Roadmap",
-        "savelen",
-        "TAMU",
-        "tamugd",
-        "TINYINT",
-        "venv"
-    ]
+  "cSpell.words": [
+    "antfu",
+    "bufferutil",
+    "npmrc",
+    "nvmrc",
+    "pnpm",
+    "TAMU",
+    "tamugd",
+    "taze",
+    "wontfix"
+  ],
+  "prettier.enable": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "editor.formatOnSave": false
 }

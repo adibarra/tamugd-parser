@@ -5,11 +5,13 @@ type/ci-workflow-env:
   - .editorconfig
   - .gitignore
   - .gitattributes
-  - .pylintrc
+  - .nvmrc
+  - .npmrc
 
-# Add 'type/dependencies' label for changes to requirements.txt
+# Add 'type/dependencies' label for changes to package.json or pnpm-lock.yaml files
 type/dependencies:
-  - '**/requirements.txt'
+  - '**/package.json'
+  - '**/pnpm-lock.yaml'
 
 # Add 'documentation' label for changes to *.md files not in the .github folder
 type/documentation:

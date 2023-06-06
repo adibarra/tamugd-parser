@@ -1,0 +1,20 @@
+{
+  "database": {
+    "host": "127.0.0.1",
+    "port": 3306,
+    "user": "",
+    "password": "",
+    "database": "",
+    "tables": {
+      "status": "status",
+      "grades": "grades"
+    }
+  },
+  "paths": {
+    "pdf": "../pdf"
+  },
+  "urls": {
+    "pdf_root": "https://web-as.tamu.edu/GradeReports/",
+    "pdf_base": "https://web-as.tamu.edu/GradeReports/PDFReports/{0}/grd{0}{1}.pdf"
+  }
+}

@@ -1,6 +1,4 @@
-__pycache__/
-venv/
-prefs.json
-*.log
-*.pdf
-*.zip
+node_modules/
+dist/
+pdf/
+config.json
